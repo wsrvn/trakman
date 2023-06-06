@@ -13,17 +13,19 @@ export default {
   rightSideOrder: [
     "MapWidget",
     "PreviousAndBest",
+    "ButtonsWidget1",
     "TMXRanking",
-    "TimerWidget",
     "LocalRanking",
     "LiveRanking",
+    "ButtonsWidget3",
     "DonationPanel"
   ],
   leftSideOrder: [
-    "ButtonsWidget",
-    "RankWidget",
     "KarmaWidget",
+    "TimerWidget",
+    "RankWidget",
     "DediRanking",
+    "ButtonsWidget2",
     "AdminPanel"
   ],
   otherComponents: ['BestCps', 'BestFinishes', 'CpCounter'],

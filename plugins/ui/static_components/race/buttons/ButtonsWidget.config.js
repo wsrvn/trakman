@@ -2,20 +2,24 @@ import cfg from '../../../config/RaceUi.js'
 import icons from '../../../config/Icons.js'
 
 export default {
-  height: 14.5,
+  height: 4.84,
   width: cfg.width,
   margin: cfg.margin,
-  rows: 3,
+  rows: 1,
   columns: 4,
-  order: [
+  order1: [
     'VisitCounter',
     'PlayerCounter',
     'VersionButton',
     'TimeButton',
+  ],
+  order2: [
     'MapsButton',
     'StatsButton',
     'SectorsButton',
     'CommandListButton',
+  ],
+  order3: [
     'VoteSkip',
     'VoteReplay',
     'PaySkip',

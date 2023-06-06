@@ -12,7 +12,7 @@ import KarmaWidget from './static_components/race/KarmaWidget.component.js'
 import TimerWidget from './static_components/race/TimerWidget.component.js'
 import LocalRanking from './static_components/race/LocalRanking.component.js'
 import LiveRanking from './static_components/race/LiveRanking.component.js'
-import ButtonsWidget from './static_components/race/buttons/ButtonsWidget.component.js'
+import {ButtonsWidget1, ButtonsWidget2, ButtonsWidget3} from './static_components/race/buttons/ButtonsWidget.component.js'
 import TMXRanking from './static_components/race/TMXRanking.component.js'
 import AdminPanel from './static_components/race/AdminPanel.component.js'
 import BestCps from './static_components/race/BestCps.component.js'
@@ -75,7 +75,9 @@ tm.addListener(`Startup`, (): void => {
   new TimerWidget()
   new LocalRanking()
   new LiveRanking()
-  new ButtonsWidget()
+  new ButtonsWidget1()
+  new ButtonsWidget2()
+  new ButtonsWidget3()
   new TMXRanking()
   new AdminPanel()
   new DonationPanel()
