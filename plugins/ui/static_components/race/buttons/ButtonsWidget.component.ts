@@ -125,7 +125,6 @@ export class ButtonsWidget2 extends StaticComponent {
 
 
   displayToPlayer(login: string): void {
-    console.log('2')
     if (!this.isDisplayed) { return }
     tm.sendManialink(this.xml, login)
   }
