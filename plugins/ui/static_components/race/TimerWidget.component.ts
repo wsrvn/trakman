@@ -138,14 +138,24 @@ export default class TimerWidget extends StaticComponent {
   }
 
   private constructXml(isDynamic: boolean): string {
-    const headerHeight: number = this.header.options.height
-    let headerXml = isDynamic ? this.getButtonsXml() :
-      this.header.constructXml(config.title, config.icon, this.side)
+    const sideOffset = (config.displayHeader || !isDynamic) ? 0 : config.buttonWidth + config.margin
+    const width = config.width - sideOffset
+    const height = config.height
+    let headerXml = ''
+    let headerHeight = -config.margin
+    let verticalButtonsXml = ''
+    if (config.displayHeader) {
+      headerHeight = this.header.options.height
+      headerXml = isDynamic ? this.getButtonsXml() :
+        this.header.constructXml(config.title, config.icon, this.side)
+    } else if(isDynamic) {
+      verticalButtonsXml = `<frame posn="${width + config.margin} 0 2">${this.getButtonsXml(true)}</frame>`
+    }
     let timeXml = ''
-    const bottomH = config.height - (headerHeight + config.margin)
+    const bottomH = height - (headerHeight + config.margin)
     if (tm.timer.isDynamic && !this.isOnRestart) {
       if (tm.timer.isPaused) {
-        timeXml = centeredText(config.pausedText, config.width, bottomH,
+        timeXml = centeredText(config.pausedText, width, bottomH,
           { specialFont: true, yOffset: -0.3, xOffset: 0.2 })
       } else {
         const time = Math.floor(tm.timer.remainingRaceTime / 1000)
@@ -160,7 +170,7 @@ export default class TimerWidget extends StaticComponent {
         const minutes = (~~(time / 60) % 60).toString().padStart(2, '0')
         const seconds = (time % 60).toString().padStart(2, '0')
         const timeStr = hoursAmount < 100 ? `${hours}${minutes}:${seconds}` : `${hoursAmount} hours`
-        timeXml = centeredText('$' + timeColour + timeStr, config.width, bottomH,
+        timeXml = centeredText('$' + timeColour + timeStr, width, bottomH,
           { specialFont: true, yOffset: config.textYOffset })
       }
     }
@@ -170,20 +180,30 @@ export default class TimerWidget extends StaticComponent {
         <format textsize="1" textcolor="FFFF"/> 
         ${headerXml}
         <frame posn="0 ${-headerHeight - config.margin} -40">
-          <quad posn="0 0 1" sizen="${config.width} ${bottomH}" action="${this.pauseButtonId}"/>
-          <quad posn="0 0 -45" sizen="${config.width} ${bottomH}" bgcolor="${config.background}"/>
+          <quad posn="0 0 1" sizen="${width} ${bottomH}" action="${this.pauseButtonId}"/>
+          <quad posn="0 0 -45" sizen="${width} ${bottomH}" bgcolor="${config.background}"/>
           ${timeXml}
+          ${verticalButtonsXml}
         </frame>
       </frame>
     </manialink>`
   }
 
-  private getButtonsXml(): string {
+  private getButtonsXml(vertical = false): string {
     const headerW = config.width - 3 * (config.buttonWidth + config.margin)
     const headerRectWidth = headerW - (this.header.options.squareWidth + this.header.options.margin)
     let buttonXml = ''
+    let height = 0
+    if (vertical) {
+      height = (config.height - config.margin * 2) / 3
+    }
     for (const [i, e] of config.buttonOrder.entries()) {
-      const x = headerW + config.margin + (config.margin + config.buttonWidth) * i
+      let x
+      if (vertical) {
+        x =( height + config.margin) * i
+      } else {
+        x = headerW + config.margin + (config.margin + config.buttonWidth) * i
+      }
       const w = config.buttonWidth
       const h = this.header.options.height
       const m = config.iconPadding
@@ -203,8 +223,16 @@ export default class TimerWidget extends StaticComponent {
         hoverIcon = config.iconsHover.subtract
         id = this.subtractButtonId
       }
-      buttonXml += `<quad posn="${x} 0 0" sizen="${w} ${h}" bgcolor="${this.header.options.iconBackground}" />
-      <quad posn="${x + m} ${-m} 1" sizen="${w - 2 * m} ${h - 2 * m}" imagefocus="${hoverIcon}" image="${icon}" action="${id}"/>`
+      if (vertical) {
+        buttonXml += `<quad posn="0 ${-x} 0" sizen="${w} ${height}" bgcolor="${this.header.options.iconBackground}" />
+        <quad posn="${m} ${-(m + x)} 1" sizen="${w - 2 * m} ${height - 2 * m}" imagefocus="${hoverIcon}" image="${icon}" action="${id}"/>`
+      } else {
+        buttonXml += `<quad posn="${x} 0 0" sizen="${w} ${h}" bgcolor="${this.header.options.iconBackground}" />
+        <quad posn="${x + m} ${-m} 1" sizen="${w - 2 * m} ${h - 2 * m}" imagefocus="${hoverIcon}" image="${icon}" action="${id}"/>`
+      }
+    }
+    if (vertical) {
+      return buttonXml
     }
     return this.header.constructXml(config.title, config.icon,
       this.side, { rectangleWidth: headerRectWidth }) + buttonXml

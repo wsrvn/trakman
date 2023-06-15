@@ -12,6 +12,7 @@ export default {
   background: StaticHeader.resultPreset.iconBackground,
   donateAmounts: [50, 100, 200, 500, 1000, 5000],
   textScale: 0.9,
+  resultWidth: cfg.width,
   donateBackground: cfg.background,
   donateText: 'Donate',
   mainTextBackground: '',

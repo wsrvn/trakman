@@ -3,14 +3,15 @@ import cfg from '../../config/RaceUi.js'
 const p = tm.utils.palette
 
 export default {
-  height: 6.45,
+  height: 5.6,
   width: cfg.width,
   title: "Timer",
   icon: icons.clock,
+  displayHeader: false,
   margin: cfg.margin,
   background: cfg.background,
   timerActionsPrivilege: 1,
-  buttonWidth: 1.8,
+  buttonWidth: 1.7,
   notDynamic: `${p.error}Dynamic timer is disabled.`,
   buttonOrder: ['pause', 'add', 'subtract'],
   pausedText: 'PAUSED',
