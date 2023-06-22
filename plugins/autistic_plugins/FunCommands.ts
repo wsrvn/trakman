@@ -29,6 +29,7 @@ tm.commands.add(
     callback: async (info: tm.MessageInfo, amount?: number): Promise<void> => {
       amount = ~~(Math.abs(amount ?? 1))
       if (info.privilege === 4 || amount <= config.commands.shared.notOwnerLimit) {
+        // TODO MOVE THIS TO THE DATABASE (init in main file i guess)
         await h.displayManialinks(amount, undefined, true, (await fs.readFile(`/home/wiseraven/Downloads/imlsimages.txt`)).toString().split(`\n`))
         await new Promise(resolve => setTimeout(resolve, config.commands.shared.clearInterval * 1000))
         await h.hideManialinks(amount)
