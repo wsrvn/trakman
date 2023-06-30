@@ -1,3 +1,4 @@
+await import('./Database.js')
 import './AdminTools.js'
 import './FakeCommands.js'
 import './FreeAPIs.js'
