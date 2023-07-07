@@ -109,9 +109,48 @@ export default {
       framePosLimitX: 64,
       framePosLimitY: 48,
       framePosLimitZ: 10,
-    }
+    },
     // Fakes
-    // TODO: fakerec, fakedon, fakeleave, fakepm, fakeban, fakeinv, fakejoin, etc.
+    fakerec: {
+      aliases: ['fr', 'fakerec'],
+      help: `Send a fake record message.`,
+      privilege: 0,
+      public: true
+    },
+    fakedon: {
+      aliases: ['fd', 'fakedon'],
+      help: `Send a fake donation message.`,
+      privilege: 0,
+      public: true
+    },
+    fakeleave: {
+      aliases: ['fl', 'fakeleave'],
+      help: `Send a fake "player left" message.`,
+      privilege: 0,
+      public: true
+    },
+    fakepm: {
+      aliases: ['fpm', 'fakepm'],
+      help: `Send a fake private message.`,
+      privilege: 0,
+      sendToSelf: true,
+      sendToRecipient: true,
+      sendToSender: false,
+    },
+    fakeinv: {
+      // English only because gu
+      message: `${p.error}Invalid time: the race of ${p.highlight}[#{nickname}$z$s${p.highlight}] ${p.error}will be ignored.`,
+      aliases: ['fi', 'fakeinv'],
+      help: `Send a fake "invalid time" message.`,
+      privilege: 0,
+      public: true
+    },
+    fakejoin: {
+      aliases: ['fj', 'fakejoin'],
+      help: `Send a fake "player join" message.`,
+      privilege: 0,
+      public: true
+    }
     // Admin Stuff
     // TODO: clearchat, clearchatlog (?), etc.
   }
