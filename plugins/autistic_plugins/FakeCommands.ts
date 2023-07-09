@@ -7,7 +7,7 @@ import { helpers as h } from './HelperFunctions.js'
 
 /**
  * Silly fake messages
- * @author wiseraven
+ * @author wiseraven & wikson
  */
 
 tm.commands.add(
@@ -15,8 +15,41 @@ tm.commands.add(
         aliases: config.commands.fakerec.aliases,
         help: config.commands.fakerec.help,
         params: [{ name: 'time' }],
-        callback: async (info: tm.MessageInfo, time: string): Promise<void> => {
-            //todo
+        callback: (info: tm.MessageInfo, time: string): void => {
+            const secondsRegex = /^[0-5]?[0-9]\.[0-9]{2}$/g
+            const minutesRegex = /^[0-5]?[0-9]\:[0-5][0-9]\.[0-9]{2}$/g
+            const hoursRegex = /^[0-9]\:[0-5][0-9]\:[0-5][0-9]\.[0-9]{2}$/g
+            if (secondsRegex.test(time) || minutesRegex.test(time) || hoursRegex.test(time)) {
+                let [hundreths, seconds, minutes, hours] = time.split(/[.:]/g).map(a => Number(a)).reverse()
+                hours ??= 0
+                minutes ??= 0
+                const finishTime = hundreths * 10 + seconds * 1000 + minutes * 1000 * 60 + hours * 1000 * 60 * 60
+                const localRecords = tm.records.local
+                const prevPosition = localRecords.findIndex(a => a.login === info.login) + 1
+                let prevObj: undefined | { time: number, position: number } = prevPosition === 0 ? undefined :
+                    { time: localRecords[prevPosition - 1].time, position: prevPosition }
+                if (prevObj !== undefined && prevObj.time < finishTime) {
+                    tm.sendMessage(`FUCK YOU`, info.login)
+                    return
+                }
+                if (prevPosition !== 0 && prevPosition > tm.records.maxLocalsAmount) {
+                    prevObj = undefined
+                }
+                const position = localRecords.reduce((acc, cur) => cur.time <= finishTime ? acc + 1 : acc, 1)
+                const rs = tm.utils.getRankingString({ time: finishTime, position }, prevObj)
+                tm.sendMessage(tm.utils.strVar(mconfig.record, {
+                    nickname: tm.utils.strip(info.nickname, true),
+                    status: rs.status,
+                    position: tm.utils.getOrdinalSuffix(position),
+                    time: tm.utils.getTimeString(finishTime),
+                    difference: rs.difference !== undefined ? tm.utils.strVar(mconfig.recordDifference, {
+                        position: prevPosition,
+                        time: rs.difference
+                    }) : ''
+                }))
+            } else {
+                tm.sendMessage(`FUCK YOU`, info.login)
+            }
         },
         privilege: config.commands.fakerec.privilege
     },
