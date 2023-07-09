@@ -48,8 +48,9 @@ export default {
       public: true
     },
     rule34: {
-      apiUrl: `https://api.rule34.xxx/index.php?page=dapi&s=post&q=index&json=1&limit=1&pid=#{randomIndex}&tags=#{query}`,
+      apiUrl: `https://api.rule34.xxx/index.php?page=dapi&s=post&q=index&json=1&limit=#{fetchAmount}&tags=#{query}`,
       warnAboutRandom: true,
+      useRandom: true,
       usingRandom: `${p.error}No query specified, fetching a generic artwork (tag: "1girls")...`,
       noResult: `${p.error}Couldn't find any artwork with "#{tags}" tags on Rule34.`,
       fetchError: `${p.error}Couldn't get any response from the Rule34 API.`,
@@ -61,7 +62,8 @@ export default {
       help: `Query Rule34 for NSFW artwork.`,
       privilege: 0,
       public: true,
-      maxPages: 10, // 10 would equal to 10 artworks accessible at one given moment (if there even is any artwork available)
+      fetchAmount: 500, // 10 would equal to 10 artworks accessible at one given moment (if there even is any artwork available)
+      shownTagsAmount: 3, // Amount of tags to show in the message
       defaultTags: ['1girls'] // Tags to use when none are specified
     },
     // Restricted APIs

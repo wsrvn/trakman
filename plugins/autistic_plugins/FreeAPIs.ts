@@ -116,7 +116,7 @@ tm.commands.add(
                 tags = config.commands.rule34.defaultTags
             }
             const url: string = tm.utils.strVar(config.commands.rule34.apiUrl, {
-                randomIndex: ~~(Math.random() * config.commands.rule34.maxPages),
+                fetchAmount: ~~config.commands.rule34.fetchAmount,
                 query: tags.join('+')
             })
             const response = await fetch(url).catch((err: Error) => err)
@@ -125,18 +125,18 @@ tm.commands.add(
                 return
             }
             const json: any = await response.json().catch((err: Error) => err)
-            if (json?.[0] === undefined || json instanceof Error) {
+            if (json?.[0] === undefined || json instanceof Error) { // Check if first exists
                 tm.sendMessage(tm.utils.strVar(config.commands.rule34.noResult, {
                     tags: tm.utils.strip(tags.join(', '))
                 }), info.login)
                 return
             }
+            const randomIndex: number = config.commands.rule34.useRandom ? ~~h.getRandom(0, Object.keys(json).length - 1) : 0
             // Get the data
-            const rating: string = json?.[0]?.rating
-            const date: string = tm.utils.formatDate(new Date(json?.[0]?.change * 1000), true)
-            const receivedTags: Array<string> = json?.[0]?.tags.split(' ')
-            receivedTags.length = 3
-            const imageUrl: string = `$L[${tm.utils.fixProtocol(json?.[0]?.file_url)}]Click here$L`
+            const rating: string = json?.[randomIndex]?.rating
+            const date: string = tm.utils.formatDate(new Date(json?.[randomIndex]?.change * 1000), true)
+            const receivedTags: Array<string> = json?.[randomIndex]?.tags.split(' ').slice(0, config.commands.rule34.shownTagsAmount)
+            const imageUrl: string = `$L[${tm.utils.fixProtocol(json?.[randomIndex]?.file_url)}]Click here$L`
             // Send out the message
             tm.sendMessage(
                 tm.utils.strVar(config.commands.rule34.artworkInfo, {
