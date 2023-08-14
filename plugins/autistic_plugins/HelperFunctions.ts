@@ -140,5 +140,5 @@ export const helpers = {
   pushDbImage: async (url: string): Promise<void> => {
     const query: string = 'insert into images(url) values ($1)'
     await tm.db.query(query, url)
-  }
+  },
 }

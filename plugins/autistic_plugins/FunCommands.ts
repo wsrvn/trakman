@@ -1,6 +1,6 @@
 import config from './Config.js'
 import messages from '../../config/Messages.js'
-import fs from 'node:fs/promises'
+import charmap from '../../src/data/SpecialCharmap.js'
 import { helpers as h } from './HelperFunctions.js'
 
 tm.commands.add(
@@ -11,7 +11,7 @@ tm.commands.add(
     callback: async (info: tm.MessageInfo, text: string): Promise<void> => {
       const message: string = tm.utils.makeGradient(text, h.getRandomChars(3), h.getRandomChars(3))
       // Maybe try the popup entry thing?
-      tm.log.trace(`/grad result: ${message}`)
+      tm.log.trace(`/gradient result: ${message}`)
       tm.sendMessage(tm.utils.strVar(config.commands.gradient.message,
         {
           nickname: info.nickname,
@@ -20,6 +20,34 @@ tm.commands.add(
       ), config.commands.gradient.public ? undefined : info.login, false)
     },
     privilege: config.commands.gradient.privilege
+  },
+  {
+    aliases: config.commands.mapchars.aliases,
+    help: config.commands.mapchars.help,
+    params: [{ name: 'text', type: 'multiword' }],
+    callback: async (info: tm.MessageInfo, text: string): Promise<void> => {
+      let res: string = ``
+      let char: string | undefined = undefined
+      let key: string[] = []
+      for (let c of text) {
+        key = charmap[c as keyof typeof charmap]
+        if (key !== undefined) {
+          char = charmap[c as keyof typeof charmap][~~(Math.random() * charmap[c as keyof typeof charmap].length)]
+        }
+        res += char ?? c
+        char = undefined
+      }
+      const message: string = res
+      // Maybe try the popup entry thing?
+      tm.log.trace(`/mapchars result: ${message}`)
+      tm.sendMessage(tm.utils.strVar(config.commands.mapchars.message,
+        {
+          nickname: info.nickname,
+          message: message
+        }
+      ), config.commands.mapchars.public ? undefined : info.login, false)
+    },
+    privilege: config.commands.mapchars.privilege
   },
   {
     aliases: config.commands.mls.aliases,
@@ -61,6 +89,7 @@ tm.commands.add(
     help: config.commands.addimage.help,
     params: [{ name: 'url' }],
     callback: async (info: tm.MessageInfo, url: string): Promise<void> => {
+      // Check if it's a real URL?
       h.pushDbImage(url)
       tm.sendMessage(tm.utils.strVar(config.commands.addimage.message, { url: tm.utils.fixProtocol(url) }), info.login)
     },

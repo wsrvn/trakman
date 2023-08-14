@@ -86,11 +86,18 @@ export default {
       public: true
     },
     // Fun Stuff
-    // TODO: rndt, srndt, urndt, grad, rs, keygen, ship, 8ball, etc.
+    // TODO: rndt, srndt, urndt, keygen, ship, 8ball, etc.
     gradient: {
       message: `$g[#{nickname}$z$s$g] #{message}`,
       aliases: ['grad', 'gradient'],
       help: `Generate a random gradient with the provided text.`,
+      privilege: 0,
+      public: true,
+    },
+    mapchars: {
+      message: `$g[#{nickname}$z$s$g] #{message}`,
+      aliases: ['mapchars', 'mc', 'rs'],
+      help: `Turn your text into a mess of special characters.`,
       privilege: 0,
       public: true,
     },
