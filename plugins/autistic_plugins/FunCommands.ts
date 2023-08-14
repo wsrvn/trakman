@@ -5,6 +5,23 @@ import { helpers as h } from './HelperFunctions.js'
 
 tm.commands.add(
   {
+    aliases: config.commands.gradient.aliases,
+    help: config.commands.gradient.help,
+    params: [{ name: 'text', type: 'multiword' }],
+    callback: async (info: tm.MessageInfo, text: string): Promise<void> => {
+      const message: string = tm.utils.makeGradient(text, h.getRandomChars(3), h.getRandomChars(3))
+      // Maybe try the popup entry thing?
+      tm.log.trace(`/grad result: ${message}`)
+      tm.sendMessage(tm.utils.strVar(config.commands.gradient.message,
+        {
+          nickname: info.nickname,
+          message: message
+        }
+      ), config.commands.gradient.public ? undefined : info.login, false)
+    },
+    privilege: config.commands.gradient.privilege
+  },
+  {
     aliases: config.commands.mls.aliases,
     help: config.commands.mls.help,
     params: [{ name: 'amount', type: 'int' }, { name: 'size', type: 'int', optional: true }],

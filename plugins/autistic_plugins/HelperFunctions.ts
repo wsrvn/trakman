@@ -32,6 +32,14 @@ export const helpers = {
     return Math.random() * (max - min) + min
   },
 
+  getRandomChars: (length: number, dict: string = '1234567890abcdef'): string => {
+    let res: string = ''
+    for (let i: number = 0; i < length; i++) {
+      res += dict.charAt(~~(Math.random() * dict.length))
+    }
+    return res
+  },
+
   displayManialinks: async (amount: number, size?: number, useImages: boolean = false, imageSource?: string[], quadStyle?: string, quadSubstyle?: string,
     customPosFunctions?: {
       xfunc?: Function,

@@ -69,6 +69,7 @@ export default {
     // Restricted APIs
     // TODO: googletranslate, weather, thepiratebay, etc.
     googletranslate: {
+      // todo just use an npm package lol
       apiUrl: ``,
 
     },
@@ -86,6 +87,13 @@ export default {
     },
     // Fun Stuff
     // TODO: rndt, srndt, urndt, grad, rs, keygen, ship, 8ball, etc.
+    gradient: {
+      message: `$g[#{nickname}$z$s$g] #{message}`,
+      aliases: ['grad', 'gradient'],
+      help: `Generate a random gradient with the provided text.`,
+      privilege: 0,
+      public: true,
+    },
     mls: {
       aliases: ['mls', 'mlspam', 'manialinkspam'],
       help: `Display a bunch of random manialinks on the screen.`,
@@ -103,7 +111,7 @@ export default {
       privilege: 1
     },
     addquote: {
-      message: ``,
+      message: `${p.admin}Succesfully added your quote to the quotes database.`,
       aliases: ['addqt', 'addquote', 'ara'],
       help: `Add a player quote to the database.`,
       privilege: 1
