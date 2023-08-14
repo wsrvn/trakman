@@ -96,6 +96,18 @@ export default {
       help: `Display a random image on the screen.`,
       privilege: 1
     },
+    addimage: {
+      message: `${p.admin}Succesfully added ${p.highlight}$L[#{url}]this url$L ${p.admin}to the images database.`,
+      aliases: ['addimg', 'addimage', 'imlsa'],
+      help: `Add an image to the database.`,
+      privilege: 1
+    },
+    addquote: {
+      message: ``,
+      aliases: ['addqt', 'addquote', 'ara'],
+      help: `Add a player quote to the database.`,
+      privilege: 1
+    },
     smls: {
       aliases: ['smls', 'cmls', 'spiral'],
       help: `Display a spiral of manialinks on the screen.`,

@@ -42,8 +42,8 @@ export const helpers = {
     // SHUT UP
     let [posx, posy]: Array<Array<number>> = [[], []]
     let [key, value, image]: Array<string> = [``, ``, ``]
-    const loop: NodeJS.Timer = setInterval((): void => {
-      if (i === amount) {
+    const loop: NodeJS.Timeout = setInterval((): void => {
+      if (i === amount - 1) {
         clearInterval(loop)
       }
       if (customPosFunctions !== undefined) {
@@ -99,8 +99,8 @@ export const helpers = {
   hideManialinks: async (amount: number): Promise<void> => {
     let xmls: Array<string> = []
     let i: number = 0
-    const loop: NodeJS.Timer = setInterval((): void => {
-      if (i === amount) {
+    const loop: NodeJS.Timeout = setInterval((): void => {
+      if (i === amount - 1) {
         clearInterval(loop)
       }
       xmls.push(
@@ -118,4 +118,19 @@ export const helpers = {
       i++
     }, config.commands.shared.updateInterval * 1000)
   },
+
+  /**
+   * 
+   * @returns All rows as an array from the 'images' table
+   */
+  getDbImages: async (): Promise<any | Error> => {
+    const query: string = `select url from images`
+    // COPE TYPESCRIPT IM A JS PROGRAMMER
+    return ((await tm.db.query(query) as any).map((a: any) => a.url))
+  },
+
+  pushDbImage: async (url: string): Promise<void> => {
+    const query: string = 'insert into images(url) values ($1)'
+    await tm.db.query(query, url)
+  }
 }

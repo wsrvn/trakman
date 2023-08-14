@@ -29,8 +29,7 @@ tm.commands.add(
     callback: async (info: tm.MessageInfo, amount?: number): Promise<void> => {
       amount = ~~(Math.abs(amount ?? 1))
       if (info.privilege === 4 || amount <= config.commands.shared.notOwnerLimit) {
-        // TODO MOVE THIS TO THE DATABASE (init in main file i guess)
-        await h.displayManialinks(amount, undefined, true, (await fs.readFile(`/home/wiseraven/Downloads/imlsimages.txt`)).toString().split(`\n`))
+        await h.displayManialinks(amount, undefined, true, await h.getDbImages())
         await new Promise(resolve => setTimeout(resolve, config.commands.shared.clearInterval * 1000))
         await h.hideManialinks(amount)
       } else {
@@ -39,6 +38,16 @@ tm.commands.add(
       }
     },
     privilege: config.commands.imls.privilege
+  },
+  {
+    aliases: config.commands.addimage.aliases,
+    help: config.commands.addimage.help,
+    params: [{ name: 'url' }],
+    callback: async (info: tm.MessageInfo, url: string): Promise<void> => {
+      h.pushDbImage(url)
+      tm.sendMessage(tm.utils.strVar(config.commands.addimage.message, { url: tm.utils.fixProtocol(url) }), info.login)
+    },
+    privilege: config.commands.addimage.privilege
   },
   {
     aliases: config.commands.smls.aliases,
