@@ -86,7 +86,7 @@ export default {
       public: true
     },
     // Fun Stuff
-    // TODO: rndt, srndt, urndt, keygen, ship, 8ball, etc.
+    // TODO: keygen, ship, 8ball, etc.
     gradient: {
       message: `$g[#{nickname}$z$s$g] #{message}`,
       aliases: ['grad', 'gradient'],

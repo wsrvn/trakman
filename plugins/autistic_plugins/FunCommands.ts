@@ -29,7 +29,7 @@ tm.commands.add(
       let res: string = ``
       let char: string | undefined = undefined
       let key: string[] = []
-      for (let c of text) {
+      for (let c of text.toLowerCase()) {
         key = charmap[c as keyof typeof charmap]
         if (key !== undefined) {
           char = charmap[c as keyof typeof charmap][~~(Math.random() * charmap[c as keyof typeof charmap].length)]
