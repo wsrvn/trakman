@@ -56,14 +56,14 @@ export default {
       fetchError: `${p.error}Couldn't get any response from the Rule34 API.`,
       artworkInfo: `${p.message}[Rule34] ${p.highlight}Rating${p.message}: ${p.highlight}#{rating}${p.message}. `
         + `${p.highlight}Submitted${p.message}: ${p.highlight}#{date}${p.message}.`,
-      artworkResult: `${p.message}[Rule34] ${p.highlight}Tags${p.message}: ${p.highlight}#{tags}${p.message}, `
+      artworkResult: `${p.message}[Rule34] ${p.highlight}Tags${p.message}: ${p.highlight}#{tags}${p.message}. `
         + `${p.highlight}Image URL${p.message}: ${p.highlight}#{url}${p.message}.`,
       aliases: [`r34`, `rule34`],
       help: `Query Rule34 for NSFW artwork.`,
       privilege: 0,
       public: true,
       fetchAmount: 500, // 10 would equal to 10 artworks accessible at one given moment (if there even is any artwork available)
-      shownTagsAmount: 3, // Amount of tags to show in the message
+      shownTagsAmount: 10, // Amount of tags to show in the message
       defaultTags: ['1girls'] // Tags to use when none are specified
     },
     // Restricted APIs

@@ -3,6 +3,7 @@ import { Logger } from '../Logger.js'
 import { ClientRequest } from './ClientRequest.js'
 import { ClientSocket } from './ClientSocket.js'
 
+
 export abstract class Client {
 
   private static socket: ClientSocket = new ClientSocket()
@@ -60,10 +61,6 @@ export abstract class Client {
    */
   static async call<T extends string>(method: T, params: T extends 'system.multicall' ? tm.Call[] : tm.CallParams[] = []):
     Promise<T extends 'system.multicall' ? ({ method: string, params: any } | Error)[] | Error : any | Error> {
-    if (Date.now() - this.lastCallTimestamp < 1) {
-      this.lastCallTimestamp = Date.now()
-      await new Promise((r): NodeJS.Immediate => setImmediate(r))
-    }
     let callParams: tm.CallParams[] = params
     if (method === 'system.multicall') {
       const calls: tm.Call[] = params as any
@@ -106,10 +103,10 @@ export abstract class Client {
    * @param params Optional params for the dedicated server method
    */
   static callNoRes<T extends string>(method: T, params: T extends 'system.multicall' ? tm.Call[] : tm.CallParams[] = []): void {
-    if (Date.now() - this.lastCallTimestamp < 1) {
-      setTimeout((): void => this.callNoRes(method, params), 1)
-      return
-    }
+    // if (Date.now() === this.lastCallTimestamp) {
+    //   setImmediate(this.callNoRes.bind(this), method, params)
+    //   return
+    // }
     this.lastCallTimestamp = Date.now()
     let callParams: tm.CallParams[] = params
     if (method === 'system.multicall') {

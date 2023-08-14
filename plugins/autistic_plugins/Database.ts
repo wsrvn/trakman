@@ -1,4 +1,4 @@
-export {}
+export { }
 
 const queries = [
   `CREATE TABLE IF NOT EXISTS trivia(
@@ -19,6 +19,6 @@ const queries = [
     );`
 ]
 
-for(const e of queries) {
+for (const e of queries) {
   await tm.db.query(e)
 }
