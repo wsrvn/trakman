@@ -51,7 +51,7 @@ tm.commands.add(
                 // Dedimania
                 const prevDediPosition: number = dedimania.records.findIndex(a => a.login === info.login) + 1
                 let prevDediObj: undefined | { time: number, position: number } = prevPosition === 0 ? undefined :
-                    { time: tm.records.local[prevPosition - 1].time, position: prevPosition }
+                    { time: dedimania.records[prevPosition - 1].time, position: prevPosition }
                 if (prevDediObj !== undefined && prevDediObj.time < finishTime) {
                     tm.sendMessage(config.commands.fakerec.errorMessage, info.login)
                     return
