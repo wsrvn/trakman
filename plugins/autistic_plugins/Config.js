@@ -90,6 +90,7 @@ export default {
     gradient: {
       message: `$g[#{nickname}$z$s$g] #{message}`,
       aliases: ['grad', 'gradient'],
+      logResult: true, // Whether to log the result ("trace" level)
       help: `Generate a random gradient with the provided text.`,
       privilege: 0,
       public: true,
@@ -97,7 +98,19 @@ export default {
     mapchars: {
       message: `$g[#{nickname}$z$s$g] #{message}`,
       aliases: ['mapchars', 'mc', 'rs'],
+      logResult: true, // Whether to log the result ("trace" level)
       help: `Turn your text into a mess of special characters.`,
+      privilege: 0,
+      public: true,
+    },
+    randomtext: {
+      message: `$g[#{nickname}$z$s$g] #{message}`,
+      aliases: ['rndt', 'randomtext', 'rt'],
+      logResult: false, // Whether to log the result ("trace" level)
+      possibleModifiers: ['s', 'w', 'i', 'o', 'n', 't'], // Usable text modifiers
+      applyRandomColour: true, // Whether to apply a random colour to each character
+      applyRandomModifier: true, // Whether to apply a random text modifier to each character
+      help: `Turn your text into a mess of random modifiers and/or colours.`,
       privilege: 0,
       public: true,
     },

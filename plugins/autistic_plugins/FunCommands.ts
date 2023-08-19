@@ -10,8 +10,10 @@ tm.commands.add(
     params: [{ name: 'text', type: 'multiword' }],
     callback: async (info: tm.MessageInfo, text: string): Promise<void> => {
       const message: string = tm.utils.makeGradient(text, h.getRandomChars(3), h.getRandomChars(3))
-      // Maybe try the popup entry thing?
-      tm.log.trace(`/gradient result: ${message}`)
+      if (config.commands.gradient.logResult) {
+        // Maybe try the popup entry thing?
+        tm.log.trace(`/gradient result: ${message}`)
+      }
       tm.sendMessage(tm.utils.strVar(config.commands.gradient.message,
         {
           nickname: info.nickname,
@@ -38,8 +40,10 @@ tm.commands.add(
         char = undefined
       }
       const message: string = res
-      // Maybe try the popup entry thing?
-      tm.log.trace(`/mapchars result: ${message}`)
+      if (config.commands.mapchars.logResult) {
+        // Maybe try the popup entry thing?
+        tm.log.trace(`/mapchars result: ${message}`)
+      }
       tm.sendMessage(tm.utils.strVar(config.commands.mapchars.message,
         {
           nickname: info.nickname,
@@ -48,6 +52,35 @@ tm.commands.add(
       ), config.commands.mapchars.public ? undefined : info.login, false)
     },
     privilege: config.commands.mapchars.privilege
+  },
+  {
+    aliases: config.commands.randomtext.aliases,
+    help: config.commands.randomtext.help,
+    params: [{ name: 'text', type: 'multiword' }],
+    callback: async (info: tm.MessageInfo, text: string): Promise<void> => {
+      let res: string = ``
+      for (let c of text.toLowerCase()) {
+        if (config.commands.randomtext.applyRandomModifier) {
+          res += `$` + h.getRandomChars(1, config.commands.randomtext.possibleModifiers.join(''))
+        }
+        if (config.commands.randomtext.applyRandomColour) {
+          res += `$` + h.getRandomChars(3)
+        }
+        res += c + ` $z$s`
+      }
+      const message: string = res
+      if (config.commands.randomtext.logResult) {
+        // Maybe try the popup entry thing?
+        tm.log.trace(`/randomtext result: ${message} `)
+      }
+      tm.sendMessage(tm.utils.strVar(config.commands.mapchars.message,
+        {
+          nickname: info.nickname,
+          message: message
+        }
+      ), config.commands.randomtext.public ? undefined : info.login, false)
+    },
+    privilege: config.commands.randomtext.privilege
   },
   {
     aliases: config.commands.mls.aliases,
