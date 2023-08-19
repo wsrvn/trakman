@@ -3,7 +3,6 @@ import { Logger } from '../Logger.js'
 import { ClientRequest } from './ClientRequest.js'
 import { ClientSocket } from './ClientSocket.js'
 
-
 export abstract class Client {
 
   private static socket: ClientSocket = new ClientSocket()
