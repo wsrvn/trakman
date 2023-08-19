@@ -156,4 +156,16 @@ tm.commands.add(
         },
         privilege: config.commands.fakepm.privilege
     },
+    {
+        aliases: config.commands.fakechat.aliases,
+        help: config.commands.fakechat.help,
+        params: [{ name: 'sender', type: 'player' }, { name: 'text', type: 'multiword', optional: true }],
+        callback: async (info: tm.MessageInfo, sender: tm.Player, text: string = ''): Promise<void> => {
+            tm.sendMessage(tm.utils.strVar(config.commands.fakechat.message, {
+                sender: sender.nickname,
+                message: text
+            }), config.commands.fakechat.public ? undefined : info.login, false)
+        },
+        privilege: config.commands.fakechat.privilege
+    }
 )

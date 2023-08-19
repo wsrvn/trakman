@@ -190,6 +190,13 @@ export default {
       help: `Send a fake "player join" message.`,
       privilege: 0,
       public: true
+    },
+    fakechat: {
+      aliases: ['fc', 'fakechat', 'fplm'],
+      message: `$g[#{nickname}$z$s$g] #{message}`,
+      help: `Send a fake player chat message.`,
+      privilege: 1,
+      public: true
     }
     // Admin Stuff
     // TODO
