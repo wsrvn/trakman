@@ -16,7 +16,6 @@ export default {
   },
   commands: {
     // Free APIs
-    // TODO: ipinfo, fact, quote, crypto, currency, animequote, etc.
     urbandictionary: {
       apiUrl: `https://api.urbandictionary.com/v0/define?term=#{query}`,
       apiRandom: `https://api.urbandictionary.com/v0/random`,
@@ -67,7 +66,6 @@ export default {
       defaultTags: ['1girls'] // Tags to use when none are specified
     },
     // Restricted APIs
-    // TODO: googletranslate, weather, thepiratebay, etc.
     googletranslate: {
       // todo just use an npm package lol
       apiUrl: ``,
@@ -86,7 +84,6 @@ export default {
       public: true
     },
     // Fun Stuff
-    // TODO: keygen, ship, 8ball, etc.
     gradient: {
       message: `$g[#{nickname}$z$s$g] #{message}`,
       aliases: ['grad', 'gradient'],
@@ -157,7 +154,8 @@ export default {
       aliases: ['fr', 'fakerec'],
       help: `Send a fake record message.`,
       privilege: 0,
-      public: true
+      public: true,
+      errorMessage: `${p.error}Wrong formatting. Try again.`
     },
     fakedon: {
       aliases: ['fd', 'fakedon'],
@@ -194,6 +192,6 @@ export default {
       public: true
     }
     // Admin Stuff
-    // TODO: clearchat, clearchatlog (?), etc.
+    // TODO
   }
 }

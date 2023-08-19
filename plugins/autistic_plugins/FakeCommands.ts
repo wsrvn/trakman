@@ -1,6 +1,7 @@
 import config from './Config.js'
 import dconfig from '../donations/Config.js' // Donation
-import mconfig from '../messages/Config.js' // Join, Leave
+import { dedimania } from '../dedimania/Dedimania.js' // For /fr
+import mconfig from '../messages/Config.js' // For /fj, /fl, /fr
 import cconfig from '../commands/config/ChatCommands.config.js' // Bootme, PM
 import { titles } from '../../config/Titles.js' // For /fj
 import { helpers as h } from './HelperFunctions.js'
@@ -16,26 +17,26 @@ tm.commands.add(
         help: config.commands.fakerec.help,
         params: [{ name: 'time' }],
         callback: (info: tm.MessageInfo, time: string): void => {
-            const secondsRegex = /^[0-5]?[0-9]\.[0-9]{2}$/g
-            const minutesRegex = /^[0-5]?[0-9]\:[0-5][0-9]\.[0-9]{2}$/g
-            const hoursRegex = /^[0-9]\:[0-5][0-9]\:[0-5][0-9]\.[0-9]{2}$/g
+            const [secondsRegex, minutesRegex, hoursRegex]: Array<RegExp> =
+                [/^[0-5]?[0-9]\.[0-9]{2}$/g, /^[0-5]?[0-9]\:[0-5][0-9]\.[0-9]{2}$/g, /^[0-9]\:[0-5][0-9]\:[0-5][0-9]\.[0-9]{2}$/g]
             if (secondsRegex.test(time) || minutesRegex.test(time) || hoursRegex.test(time)) {
                 let [hundreths, seconds, minutes, hours] = time.split(/[.:]/g).map(a => Number(a)).reverse()
                 hours ??= 0
                 minutes ??= 0
-                const finishTime = hundreths * 10 + seconds * 1000 + minutes * 1000 * 60 + hours * 1000 * 60 * 60
-                const localRecords = tm.records.local
-                const prevPosition = localRecords.findIndex(a => a.login === info.login) + 1
+                const finishTime: number = hundreths * 10 + seconds * 1000 + minutes * 1000 * 60 + hours * 1000 * 60 * 60
+                // Local
+                const prevPosition: number = tm.records.local.findIndex(a => a.login === info.login) + 1
                 let prevObj: undefined | { time: number, position: number } = prevPosition === 0 ? undefined :
-                    { time: localRecords[prevPosition - 1].time, position: prevPosition }
+                    { time: tm.records.local[prevPosition - 1].time, position: prevPosition }
                 if (prevObj !== undefined && prevObj.time < finishTime) {
-                    tm.sendMessage(`FUCK YOU`, info.login)
+                    tm.sendMessage(config.commands.fakerec.errorMessage, info.login)
                     return
                 }
                 if (prevPosition !== 0 && prevPosition > tm.records.maxLocalsAmount) {
                     prevObj = undefined
                 }
-                const position = localRecords.reduce((acc, cur) => cur.time <= finishTime ? acc + 1 : acc, 1)
+                const position: number = tm.records.local.reduce((acc, cur): number => cur.time <= finishTime ? acc + 1 : acc, 1)
+                if (position > tm.records.maxLocalsAmount) { return }
                 const rs = tm.utils.getRankingString({ time: finishTime, position }, prevObj)
                 tm.sendMessage(tm.utils.strVar(mconfig.record, {
                     nickname: tm.utils.strip(info.nickname, true),
@@ -47,8 +48,32 @@ tm.commands.add(
                         time: rs.difference
                     }) : ''
                 }))
+                // Dedimania
+                const prevDediPosition: number = dedimania.records.findIndex(a => a.login === info.login) + 1
+                let prevDediObj: undefined | { time: number, position: number } = prevPosition === 0 ? undefined :
+                    { time: tm.records.local[prevPosition - 1].time, position: prevPosition }
+                if (prevDediObj !== undefined && prevDediObj.time < finishTime) {
+                    tm.sendMessage(config.commands.fakerec.errorMessage, info.login)
+                    return
+                }
+                if (prevDediPosition !== 0 && prevDediPosition > dedimania.recordCountLimit) {
+                    prevDediObj = undefined
+                }
+                const dediPosition: number = dedimania.records.reduce((acc, cur): number => cur.time <= finishTime ? acc + 1 : acc, 1)
+                if (dediPosition > dedimania.recordCountLimit) { return }
+                const drs = tm.utils.getRankingString({ time: finishTime, position: dediPosition }, prevDediObj)
+                tm.sendMessage(tm.utils.strVar(mconfig.dediRecord, {
+                    nickname: tm.utils.strip(info.nickname, true),
+                    status: drs.status,
+                    position: tm.utils.getOrdinalSuffix(dediPosition),
+                    time: tm.utils.getTimeString(finishTime),
+                    difference: drs.difference !== undefined ? tm.utils.strVar(mconfig.dediDifference, {
+                        position: prevDediPosition,
+                        time: drs.difference
+                    }) : ''
+                }))
             } else {
-                tm.sendMessage(`FUCK YOU`, info.login)
+                tm.sendMessage(config.commands.fakerec.errorMessage, info.login)
             }
         },
         privilege: config.commands.fakerec.privilege
