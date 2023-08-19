@@ -162,7 +162,7 @@ tm.commands.add(
         params: [{ name: 'sender', type: 'player' }, { name: 'text', type: 'multiword', optional: true }],
         callback: async (info: tm.MessageInfo, sender: tm.Player, text: string = ''): Promise<void> => {
             tm.sendMessage(tm.utils.strVar(config.commands.fakechat.message, {
-                sender: sender.nickname,
+                nickname: sender.nickname,
                 message: text
             }), config.commands.fakechat.public ? undefined : info.login, false)
         },
