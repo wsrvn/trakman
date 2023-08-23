@@ -34,7 +34,7 @@ tm.commands.add(
       for (let c of text.toLowerCase()) {
         key = charmap[c as keyof typeof charmap]
         if (key !== undefined) {
-          char = charmap[c as keyof typeof charmap][~~(Math.random() * charmap[c as keyof typeof charmap].length)]
+          char = key[~~(Math.random() * key.length)]
         }
         res += char ?? c
         char = undefined

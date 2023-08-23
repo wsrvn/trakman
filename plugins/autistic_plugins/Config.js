@@ -197,8 +197,25 @@ export default {
       help: `Send a fake player chat message.`,
       privilege: 1,
       public: true
-    }
+    },
     // Admin Stuff
-    // TODO
+    servermessage: {
+      aliases: ['sm', 'servermessage', 'servermsg'],
+      message: `$g[#{server}$z$s$g] #{message}`,
+      help: `Send a message from the server.`,
+      privilege: 2,
+      public: true
+    },
+    clearchat: {
+      aliases: ['cc', 'clear', 'clearchat'],
+      message: ``,
+      // The amount of chat lines to be cleared,
+      // You can see 28 total by pressing C.
+      // But the game stores more for the "scrolling" function
+      amount: 28,
+      help: `Clear the entirety of the in-game chat.`,
+      privilege: 2,
+      public: true
+    },
   }
 }
