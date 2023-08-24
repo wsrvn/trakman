@@ -59,7 +59,7 @@ tm.commands.add(
     params: [{ name: 'text', type: 'multiword' }],
     callback: async (info: tm.MessageInfo, text: string): Promise<void> => {
       let res: string = ``
-      for (let c of text.toLowerCase()) {
+      for (let c of text) {
         if (config.commands.randomtext.applyRandomModifier) {
           res += `$` + h.getRandomChars(1, config.commands.randomtext.possibleModifiers.join(''))
         }

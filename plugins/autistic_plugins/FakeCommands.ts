@@ -29,13 +29,16 @@ tm.commands.add(
                 let prevObj: undefined | { time: number, position: number } = prevPosition === 0 ? undefined :
                     { time: tm.records.local[prevPosition - 1].time, position: prevPosition }
                 if (prevObj !== undefined && prevObj.time < finishTime) {
-                    tm.sendMessage(config.commands.fakerec.errorMessage, info.login)
+                    tm.sendMessage(config.commands.fakerec.localError, info.login)
                     return
                 }
                 if (prevPosition !== 0 && prevPosition > tm.records.maxLocalsAmount) {
                     prevObj = undefined
                 }
-                const position: number = tm.records.local.reduce((acc, cur): number => cur.time <= finishTime ? acc + 1 : acc, 1)
+                let position: number = tm.records.local.findIndex(a => a.time > finishTime) + 1
+                // Crazy hackster
+                if (finishTime === prevObj?.time) { position = prevPosition }
+                // This can fail in one case out of a billion so I don't really care
                 if (position > tm.records.maxLocalsAmount) { return }
                 const rs = tm.utils.getRankingString({ time: finishTime, position }, prevObj)
                 tm.sendMessage(tm.utils.strVar(mconfig.record, {
@@ -50,16 +53,18 @@ tm.commands.add(
                 }))
                 // Dedimania
                 const prevDediPosition: number = dedimania.records.findIndex(a => a.login === info.login) + 1
-                let prevDediObj: undefined | { time: number, position: number } = prevPosition === 0 ? undefined :
-                    { time: dedimania.records[prevPosition - 1].time, position: prevPosition }
+                let prevDediObj: undefined | { time: number, position: number } = prevDediPosition === 0 ? undefined :
+                    { time: dedimania.records[prevDediPosition - 1].time, position: prevDediPosition }
                 if (prevDediObj !== undefined && prevDediObj.time < finishTime) {
-                    tm.sendMessage(config.commands.fakerec.errorMessage, info.login)
+                    tm.sendMessage(config.commands.fakerec.dediError, info.login)
                     return
                 }
                 if (prevDediPosition !== 0 && prevDediPosition > dedimania.recordCountLimit) {
                     prevDediObj = undefined
                 }
-                const dediPosition: number = dedimania.records.reduce((acc, cur): number => cur.time <= finishTime ? acc + 1 : acc, 1)
+                let dediPosition: number = dedimania.records.findIndex(a => a.time > finishTime) + 1
+                // Crazy hackster
+                if (finishTime === prevDediObj?.time) { dediPosition = prevDediPosition }
                 if (dediPosition > dedimania.recordCountLimit) { return }
                 const drs = tm.utils.getRankingString({ time: finishTime, position: dediPosition }, prevDediObj)
                 tm.sendMessage(tm.utils.strVar(mconfig.dediRecord, {
@@ -73,7 +78,7 @@ tm.commands.add(
                     }) : ''
                 }))
             } else {
-                tm.sendMessage(config.commands.fakerec.errorMessage, info.login)
+                tm.sendMessage(config.commands.fakerec.formatError, info.login)
             }
         },
         privilege: config.commands.fakerec.privilege

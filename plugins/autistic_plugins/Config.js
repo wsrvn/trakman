@@ -155,7 +155,9 @@ export default {
       help: `Send a fake record message.`,
       privilege: 0,
       public: true,
-      errorMessage: `${p.error}Wrong formatting. Try again.`
+      formatError: `${p.error}Wrong formatting. Try again.`,
+      localError: `${p.error}Local record message won't be displayed.`,
+      dediError: `${p.error}Dedi record message won't be displayed.`,
     },
     fakedon: {
       aliases: ['fd', 'fakedon'],
