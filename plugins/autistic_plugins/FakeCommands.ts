@@ -40,7 +40,7 @@ tm.commands.add(
                 if (finishTime === prevObj?.time) { position = prevPosition }
                 // This can fail in one case out of a billion so I don't really care
                 if (position > tm.records.maxLocalsAmount) { return }
-                const rs = tm.utils.getRankingString({ time: finishTime, position }, prevObj)
+                const rs = tm.utils.getRankingString({ time: finishTime, position: position === 0 ? position + 1 : position }, prevObj)
                 tm.sendMessage(tm.utils.strVar(mconfig.record, {
                     nickname: tm.utils.strip(info.nickname, true),
                     status: rs.status,
@@ -66,7 +66,7 @@ tm.commands.add(
                 // Crazy hackster
                 if (finishTime === prevDediObj?.time) { dediPosition = prevDediPosition }
                 if (dediPosition > dedimania.recordCountLimit) { return }
-                const drs = tm.utils.getRankingString({ time: finishTime, position: dediPosition }, prevDediObj)
+                const drs = tm.utils.getRankingString({ time: finishTime, position: dediPosition === 0 ? dediPosition + 1 : dediPosition }, prevDediObj)
                 tm.sendMessage(tm.utils.strVar(mconfig.dediRecord, {
                     nickname: tm.utils.strip(info.nickname, true),
                     status: drs.status,

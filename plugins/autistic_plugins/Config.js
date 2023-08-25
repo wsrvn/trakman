@@ -107,6 +107,7 @@ export default {
       possibleModifiers: ['s', 'w', 'i', 'o', 'n', 't'], // Usable text modifiers
       applyRandomColour: true, // Whether to apply a random colour to each character
       applyRandomModifier: true, // Whether to apply a random text modifier to each character
+      modifierAmount: 2, // The amount of text modifiers that will be applied to each character
       help: `Turn your text into a mess of random modifiers and/or colours.`,
       privilege: 0,
       public: true,

@@ -61,7 +61,9 @@ tm.commands.add(
       let res: string = ``
       for (let c of text) {
         if (config.commands.randomtext.applyRandomModifier) {
-          res += `$` + h.getRandomChars(1, config.commands.randomtext.possibleModifiers.join(''))
+          for (let i: number = 0; i < config.commands.randomtext.modifierAmount; i++) {
+            res += `$` + h.getRandomChars(1, config.commands.randomtext.possibleModifiers.join(''))
+          }
         }
         if (config.commands.randomtext.applyRandomColour) {
           res += `$` + h.getRandomChars(3)
