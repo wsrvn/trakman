@@ -1,5 +1,10 @@
 import config from './Config.js'
 
+/**
+ * Useful (or not so much) admin things
+ * @author wiseraven
+ */
+
 tm.commands.add(
     {
         aliases: config.commands.servermessage.aliases,

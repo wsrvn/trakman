@@ -4,11 +4,10 @@ import { dedimania } from '../dedimania/Dedimania.js' // For /fr
 import mconfig from '../messages/Config.js' // For /fj, /fl, /fr
 import cconfig from '../commands/config/ChatCommands.config.js' // Bootme, PM
 import { titles } from '../../config/Titles.js' // For /fj
-import { helpers as h } from './HelperFunctions.js'
 
 /**
  * Silly fake messages
- * @author wiseraven & wikson
+ * @author wiseraven
  */
 
 tm.commands.add(

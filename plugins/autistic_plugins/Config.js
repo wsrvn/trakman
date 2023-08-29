@@ -67,16 +67,22 @@ export default {
     },
     // Restricted APIs
     googletranslate: {
-      // todo just use an npm package lol
-      apiUrl: ``,
-
+      apiUrl: ``, // We use the npm package, so this is not required
+      languagesUrl: `https://cloud.google.com/translate/docs/languages`,
+      fetchError: `${p.error}Couldn't get any response from Google.`,
+      translateError: `${p.error}Couldn't translate your text: "#{input}".`,
+      translateInfo: `${p.message}[Translator] ${p.highlight}Input${p.message}: ${p.highlight}"#{input}"${p.message}; From${p.message}: ${p.highlight}"#{from}"${p.message}; To${p.message}: ${p.highlight}"#{to}"${p.message}.`,
+      translateResult: `${p.message}[Translator] ${p.highlight}#{result}`,
+      aliases: ['gt', 'googletranslate', 'gtrans'],
+      help: `Translate text via the Google translation service.`,
+      privilege: 0,
+      public: true
     },
     duckduckgo: {
       apiUrl: `https://lite.duckduckgo.com/lite`, // There's no official API that we could use
-      noQuery: `${p.error}No query specified, nothing to look for.`,
       noResult: `${p.error}Couldn't find anything about "#{query}".`,
       fetchError: `${p.error}Couldn't get any response from DuckDuckGo.`,
-      searchInfo: `${p.message}[DuckDuckGo] ${p.highlight}Query${p.message}: ${p.highlight}#{query}`,
+      searchInfo: `${p.message}[DuckDuckGo] ${p.highlight}Query${p.message}: ${p.highlight}"#{query}"${p.message}.`,
       searchResult: `${p.message}[DuckDuckGo] ${p.highlight}#{title} ${p.message}- ${p.highlight}#{snippet}${p.message}.`,
       aliases: ['ddg', 'duckduckgo', 'search'],
       help: `Query DuckDuckGo for search results.`,

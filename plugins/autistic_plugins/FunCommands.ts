@@ -3,6 +3,11 @@ import messages from '../../config/Messages.js'
 import charmap from '../../src/data/SpecialCharmap.js'
 import { helpers as h } from './HelperFunctions.js'
 
+/**
+ * Fun stuff for AS
+ * @author wiseraven
+ */
+
 tm.commands.add(
   {
     aliases: config.commands.gradient.aliases,
