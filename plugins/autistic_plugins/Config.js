@@ -71,7 +71,7 @@ export default {
       languagesUrl: `https://cloud.google.com/translate/docs/languages`,
       fetchError: `${p.error}Couldn't get any response from Google.`,
       translateError: `${p.error}Couldn't translate your text: "#{input}".`,
-      translateInfo: `${p.message}[Translator] ${p.highlight}Input${p.message}: ${p.highlight}"#{input}"${p.message}; From${p.message}: ${p.highlight}"#{from}"${p.message}; To${p.message}: ${p.highlight}"#{to}"${p.message}.`,
+      translateInfo: `${p.message}[Translator] ${p.highlight}Input${p.message}: ${p.highlight}"#{input}"${p.message}; ${p.highlight}From${p.message}: ${p.highlight}"#{from}"${p.message}; ${p.highlight}To${p.message}: ${p.highlight}"#{to}"${p.message}.`,
       translateResult: `${p.message}[Translator] ${p.highlight}#{result}`,
       aliases: ['gt', 'googletranslate', 'gtrans'],
       help: `Translate text via the Google translation service.`,
