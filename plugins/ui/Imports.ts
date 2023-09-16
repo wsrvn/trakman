@@ -12,7 +12,7 @@ import KarmaWidget from './static_components/race/KarmaWidget.component.js'
 import TimerWidget from './static_components/race/TimerWidget.component.js'
 import LocalRanking from './static_components/race/LocalRanking.component.js'
 import LiveRanking from './static_components/race/LiveRanking.component.js'
-import ButtonsWidget from './static_components/race/buttons/ButtonsWidget.component.js'
+import {ButtonsWidget1, ButtonsWidget2, ButtonsWidget3} from './static_components/race/buttons/ButtonsWidget.component.js'
 import TMXRanking from './static_components/race/TMXRanking.component.js'
 import AdminPanel from './static_components/race/AdminPanel.component.js'
 import BestCps from './static_components/race/BestCps.component.js'
@@ -65,6 +65,9 @@ import ServerInfoWindow from './dynamic_components/ServerInfo.component.js'
 import Warn from './dynamic_components/WarnWindow.component.js'
 import PlayerStatsWindow from './dynamic_components/PlayerStats.component.js'
 import TMXDetailsWindow from './dynamic_components/TMXDetailsWindow.component.js'
+import Operatorlist from './dynamic_components/admin_lists/Operatorlist.component.js'
+import Adminlist from './dynamic_components/admin_lists/Adminlist.component.js'
+import Masteradminlist from './dynamic_components/admin_lists/Masteradminlist.component.js'
 
 tm.addListener(`Startup`, (): void => {
   new RankWidget()
@@ -75,7 +78,9 @@ tm.addListener(`Startup`, (): void => {
   new TimerWidget()
   new LocalRanking()
   new LiveRanking()
-  new ButtonsWidget()
+  new ButtonsWidget1()
+  new ButtonsWidget2()
+  new ButtonsWidget3()
   new TMXRanking()
   new AdminPanel()
   new DonationPanel()
@@ -121,5 +126,7 @@ tm.addListener(`Startup`, (): void => {
   new BannerWidget()
   new PlayerStatsWindow()
   new TMXDetailsWindow()
+  new Operatorlist()
+  new Adminlist()
+  new Masteradminlist()
 }, true)
-

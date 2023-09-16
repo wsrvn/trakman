@@ -10,7 +10,7 @@ const worstAtSort: tm.Map[] = []
 const newestSort: tm.Map[] = []
 const oldestSort: tm.Map[] = []
 const jukebox: tm.Map[] = []
-const cache: {
+let cache: {
   type: 'best' | 'worst' | 'name' | 'author' | 'nofin' | 'norank' | 'noauthor' | 'newest' | 'oldest',
   query: string, list: tm.Map[]
 }[] = []
@@ -79,6 +79,18 @@ tm.addListener('MapRemoved', (map): void => {
   oldestSort.splice(oldestSort.findIndex(a => a.id === map.id), 1)
   cache.length = 0
   for (const e of updateListeners) { e('remove', map) }
+})
+
+tm.addListener('LiveRecord', (info: tm.FinishInfo): void => {
+  const time: number | undefined = tm.records.getLocal(info.login)?.time
+  if (time !== undefined && info.time === time) {
+    cache.length = 0
+  }
+})
+
+tm.addListener('BeginMap', (): void => {
+  // DESTRUCTION 200000000
+  cache.length = 0
 })
 
 /**
@@ -182,7 +194,7 @@ export const maplist = {
     let list: tm.Map[] | undefined = cache.find(a => a.query === query && a.type === 'name')?.list
     if (list === undefined) {
       list = (tm.utils.matchString(query, authorSort, 'name', true))
-        .filter(a => a.value > config.searchMinSimilatiryValue).map(a => a.obj)
+        .filter(a => a.value > config.searchMinSimilarityValue).map(a => a.obj)
       cache.unshift({ query, list, type: 'name' })
       cache.length = Math.min(config.cacheSize, cache.length)
     }
@@ -198,7 +210,7 @@ export const maplist = {
     let list: tm.Map[] | undefined = cache.find(a => a.query === query && a.type === 'author')?.list
     if (list === undefined) {
       list = (tm.utils.matchString(query, nameSort, 'author', true))
-        .filter(a => a.value > config.searchMinSimilatiryValue).map(a => a.obj)
+        .filter(a => a.value > config.searchMinSimilarityValue).map(a => a.obj)
       cache.unshift({ query, list, type: 'author' })
       cache.length = Math.min(config.cacheSize, cache.length)
     }

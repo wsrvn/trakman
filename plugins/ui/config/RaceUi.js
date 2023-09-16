@@ -1,4 +1,6 @@
 export default {
+  reduxModeEnablePlayerAmount: 20,
+  reduxModeDisablePlayerAmount: 18,
   margin: 0.15,
   marginBig: 0.27,
   format: "$s",
@@ -13,17 +15,19 @@ export default {
   rightSideOrder: [
     "MapWidget",
     "PreviousAndBest",
+    "ButtonsWidget1",
     "TMXRanking",
-    "TimerWidget",
     "LocalRanking",
     "LiveRanking",
+    "ButtonsWidget3",
     "DonationPanel"
   ],
   leftSideOrder: [
-    "ButtonsWidget",
-    "RankWidget",
     "KarmaWidget",
+    "TimerWidget",
+    "RankWidget",
     "DediRanking",
+    "ButtonsWidget2",
     "AdminPanel"
   ],
   otherComponents: ['BestCps', 'BestFinishes', 'CpCounter'],

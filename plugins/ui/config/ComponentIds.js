@@ -5,7 +5,9 @@ export default {
   timer: 70,
   map: 80,
   previousAndBest: 90,
-  buttons: 100,
+  buttons1: 100,
+  buttons2: 4329873298324,
+  buttons3: 42398324734,
   mapResult: 200,
   karma: 300,
   admin: 400,
@@ -78,4 +80,7 @@ export default {
   bannerWidget: 460000,
   playerStats: 470000,
   TMXDetailsWindow: 480000,
+  oplist: 490000,
+  adminlist: 500000,
+  masteradminlist: 510000,
 }
