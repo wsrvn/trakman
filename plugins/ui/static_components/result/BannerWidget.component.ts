@@ -50,14 +50,14 @@ export default class BannerWidget extends StaticComponent {
     return config.leftBorder + (config.resultWidth * 3 + config.marginBig * 2.3) // ye idk
   }
 
-  display(): void {
+  display() {
     if (!this.isDisplayed) { return }
-    tm.sendManialink(this.xml)
+    return this.xml
   }
 
-  displayToPlayer(login: string): void {
+  displayToPlayer(login: string) {
     if (!this.isDisplayed) { return }
-    tm.sendManialink(this.xml, login)
+    return { xml: this.xml, login }
   }
 
   constructDonateButtons(width: number, margin: number) {
