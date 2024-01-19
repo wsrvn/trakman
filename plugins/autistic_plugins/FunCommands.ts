@@ -2,6 +2,8 @@ import config from './Config.js'
 import messages from '../../config/Messages.js'
 import charmap from '../../src/data/SpecialCharmap.js'
 import { helpers as h } from './HelperFunctions.js'
+import {DOMParser} from "xmldom";
+import xpath, {SelectedValue} from "xpath";
 
 /**
  * Fun stuff for AS
@@ -132,6 +134,42 @@ tm.commands.add(
       // Check if it's a real URL?
       h.pushDbImage(url)
       tm.sendMessage(tm.utils.strVar(config.commands.addimage.message, { url: tm.utils.fixProtocol(url) }), info.login)
+    },
+    privilege: config.commands.addimage.privilege
+  },
+  {
+    aliases: config.commands.addimages.aliases,
+    help: config.commands.addimages.help,
+    params: [{ name: 'url' }],
+    callback: async (info: tm.MessageInfo, url: string): Promise<void> => {
+      const link = new URL(url)
+      const domain = link.protocol + "//" + link.hostname
+      const response = await fetch(url + "/", {method: 'GET'}).catch((err: Error) => err)
+      if (response instanceof Error) {
+        tm.sendMessage("Failed getting directory listing.", info.login)
+        return
+      }
+      const html: string | Error = await response.text().catch((err: Error) => err)
+      if (html instanceof Error) {
+        tm.sendMessage("Failed getting directory listing.", info.login)
+        return
+      }
+      const xml: Document = new DOMParser({
+        locator: {},
+        errorHandler: {
+          warning: function(w) {},
+          error: function(e) {},
+          fatalError: function (f) {}
+        }
+      }).parseFromString(html, "text/xml")
+      xpath.select(`//a/@href`, xml).map(a => (a as any).value).forEach(a => {
+        if (a.charAt(0) === '/') {
+          h.pushDbImage(domain + a)
+        } else {
+          h.pushDbImage(url + "/" + a)
+        }
+      })
+      tm.sendMessage(tm.utils.strVar(config.commands.addimages.message, { url: tm.utils.fixProtocol(url) }), info.login)
     },
     privilege: config.commands.addimage.privilege
   },

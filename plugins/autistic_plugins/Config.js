@@ -129,13 +129,19 @@ export default {
       privilege: 1
     },
     addimage: {
-      message: `${p.admin}Succesfully added ${p.highlight}$L[#{url}]this url$L ${p.admin}to the images database.`,
+      message: `${p.admin}Successfully added ${p.highlight}$L[#{url}]this url$L ${p.admin}to the images database.`,
       aliases: ['addimg', 'addimage', 'imlsa'],
       help: `Add an image to the database.`,
       privilege: 1
     },
+    addimages: {
+      message: `${p.admin}Successfully added images from ${p.highlight}$L[#{url}]this url$L ${p.admin}to the images database.`,
+      aliases: ['addimgs', 'addimages'],
+      help: `Add a shitton of images to the database.`,
+      privilege: 1
+    },
     addquote: {
-      message: `${p.admin}Succesfully added your quote to the quotes database.`,
+      message: `${p.admin}Successfully added your quote to the quotes database.`,
       aliases: ['addqt', 'addquote', 'ara'],
       help: `Add a player quote to the database.`,
       privilege: 1
