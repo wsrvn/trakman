@@ -2,8 +2,8 @@ import config from './Config.js'
 import messages from '../../config/Messages.js'
 import charmap from '../../src/data/SpecialCharmap.js'
 import { helpers as h } from './HelperFunctions.js'
-import {DOMParser} from "xmldom";
-import xpath, {SelectedValue} from "xpath";
+import { DOMParser } from "xmldom";
+import xpath from "xpath";
 
 /**
  * Fun stuff for AS
