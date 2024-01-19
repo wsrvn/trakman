@@ -55,11 +55,11 @@ export default {
    * translation in commands. 0.4 is the default value */
   nicknameToLoginSimilarityGoal: 0.4,
   /** Represents minimal similarity difference between best
-   * and second-best match at which translation will be successfull.
+   * and second-best match at which translation will be successful.
    * Used in nickname to login translation in commands. 0.15 is default value */
   nicknameToLoginMinimumDifferenceBetweenMatches: 0.15,
   /** Current controller version */
-  version: "1.4.0",
+  version: "1.4.2",
   /** Controller repository link */
   repo: "github.com/lythx/trakman",
 }
