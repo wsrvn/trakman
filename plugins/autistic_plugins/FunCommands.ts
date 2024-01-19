@@ -142,9 +142,15 @@ tm.commands.add(
     help: config.commands.addimages.help,
     params: [{ name: 'url' }],
     callback: async (info: tm.MessageInfo, url: string): Promise<void> => {
-      const link = new URL(url)
+      let urls = ""
+      if (url.charAt(url.length-1) !== '/') {
+        urls = url + "/"
+      } else {
+        urls = url
+      }
+      const link = new URL(urls)
       const domain = link.protocol + "//" + link.hostname
-      const response = await fetch(url + "/", {method: 'GET'}).catch((err: Error) => err)
+      const response = await fetch(urls, {method: 'GET'}).catch((err: Error) => err)
       if (response instanceof Error) {
         tm.sendMessage("Failed getting directory listing.", info.login)
         return
@@ -166,7 +172,7 @@ tm.commands.add(
         if (a.charAt(0) === '/') {
           h.pushDbImage(domain + a)
         } else {
-          h.pushDbImage(url + "/" + a)
+          h.pushDbImage(urls + a)
         }
       })
       tm.sendMessage(tm.utils.strVar(config.commands.addimages.message, { url: tm.utils.fixProtocol(url) }), info.login)
