@@ -96,7 +96,7 @@ tm.commands.add(
     help: config.commands.mls.help,
     params: [{ name: 'amount', type: 'int' }, { name: 'size', type: 'int', optional: true }],
     callback: async (info: tm.MessageInfo, amount: number, size?: number): Promise<void> => {
-      amount = ~~(Math.abs(amount))
+      if (amount <= 0) { return }
       // todo size check
       if (info.privilege === 4 || amount <= config.commands.shared.notOwnerLimit) {
         await h.displayManialinks(amount, size)
@@ -114,7 +114,7 @@ tm.commands.add(
     help: config.commands.imls.help,
     params: [{ name: 'amount', type: 'int', optional: true }],
     callback: async (info: tm.MessageInfo, amount?: number): Promise<void> => {
-      amount = ~~(Math.abs(amount ?? 1))
+      if (amount === undefined) { amount = 1 } else if (amount <= 0) { return }
       if (info.privilege === 4 || amount <= config.commands.shared.notOwnerLimit) {
         await h.displayManialinks(amount, undefined, true, await h.getDbImages())
         await new Promise(resolve => setTimeout(resolve, config.commands.shared.clearInterval * 1000))
@@ -143,14 +143,14 @@ tm.commands.add(
     params: [{ name: 'url' }],
     callback: async (info: tm.MessageInfo, url: string): Promise<void> => {
       let urls = ""
-      if (url.charAt(url.length-1) !== '/') {
+      if (url.charAt(url.length - 1) !== '/') {
         urls = url + "/"
       } else {
         urls = url
       }
       const link = new URL(urls)
       const domain = link.protocol + "//" + link.hostname
-      const response = await fetch(urls, {method: 'GET'}).catch((err: Error) => err)
+      const response = await fetch(urls, { method: 'GET' }).catch((err: Error) => err)
       if (response instanceof Error) {
         tm.sendMessage("Failed getting directory listing.", info.login)
         return
@@ -163,9 +163,9 @@ tm.commands.add(
       const xml: Document = new DOMParser({
         locator: {},
         errorHandler: {
-          warning: function(w) {},
-          error: function(e) {},
-          fatalError: function (f) {}
+          warning: function (w) { },
+          error: function (e) { },
+          fatalError: function (f) { }
         }
       }).parseFromString(html, "text/xml")
       xpath.select(`//a/@href`, xml).map(a => (a as any).value).forEach(a => {
@@ -184,7 +184,7 @@ tm.commands.add(
     help: config.commands.smls.help,
     params: [{ name: 'amount', type: 'int' }, { name: 'size', type: 'int', optional: true }],
     callback: async (info: tm.MessageInfo, amount: number, size?: number): Promise<void> => {
-      amount = ~~(Math.abs(amount))
+      if (amount <= 0) { return }
       const seed: number = h.getRandom(1, 10)
       if (info.privilege === 4 || amount <= config.commands.shared.notOwnerLimit) {
         await h.displayManialinks(amount, size, false, undefined, 'MedalsBig', 'MedalSlot',
