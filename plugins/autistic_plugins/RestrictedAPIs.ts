@@ -51,7 +51,7 @@ tm.commands.add(
         callback: async (info: tm.MessageInfo, query: string): Promise<void> => {
             // Real FormData, I believe this!
             const form = new URLSearchParams()
-            form.append('q', `"${query.split(' ').join('+')}"`)
+            form.append('q', `${query.split(' ').join('+')}`)
             const url: string = config.commands.duckduckgo.apiUrl // Nothing to modify
             const response = await fetch(url, {
                 method: 'POST',
