@@ -28,7 +28,8 @@ tm.commands.add(
         }
       ), config.commands.gradient.public ? undefined : info.login, false)
     },
-    privilege: config.commands.gradient.privilege
+    privilege: config.commands.gradient.privilege,
+    disableForMuted: true
   },
   {
     aliases: config.commands.mapchars.aliases,
@@ -58,7 +59,8 @@ tm.commands.add(
         }
       ), config.commands.mapchars.public ? undefined : info.login, false)
     },
-    privilege: config.commands.mapchars.privilege
+    privilege: config.commands.mapchars.privilege,
+    disableForMuted: true
   },
   {
     aliases: config.commands.randomtext.aliases,
@@ -89,7 +91,8 @@ tm.commands.add(
         }
       ), config.commands.randomtext.public ? undefined : info.login, false)
     },
-    privilege: config.commands.randomtext.privilege
+    privilege: config.commands.randomtext.privilege,
+    disableForMuted: true
   },
   {
     aliases: config.commands.mls.aliases,
@@ -107,7 +110,8 @@ tm.commands.add(
         return
       }
     },
-    privilege: config.commands.mls.privilege
+    privilege: config.commands.mls.privilege,
+    disableForMuted: true
   },
   {
     aliases: config.commands.imls.aliases,
@@ -124,7 +128,8 @@ tm.commands.add(
         return
       }
     },
-    privilege: config.commands.imls.privilege
+    privilege: config.commands.imls.privilege,
+    disableForMuted: true
   },
   {
     aliases: config.commands.addimage.aliases,
@@ -143,14 +148,14 @@ tm.commands.add(
     params: [{ name: 'url' }],
     callback: async (info: tm.MessageInfo, url: string): Promise<void> => {
       let urls = ""
-      if (url.charAt(url.length-1) !== '/') {
+      if (url.charAt(url.length - 1) !== '/') {
         urls = url + "/"
       } else {
         urls = url
       }
       const link = new URL(urls)
       const domain = link.protocol + "//" + link.hostname
-      const response = await fetch(urls, {method: 'GET'}).catch((err: Error) => err)
+      const response = await fetch(urls, { method: 'GET' }).catch((err: Error) => err)
       if (response instanceof Error) {
         tm.sendMessage("Failed getting directory listing.", info.login)
         return
@@ -163,9 +168,9 @@ tm.commands.add(
       const xml: Document = new DOMParser({
         locator: {},
         errorHandler: {
-          warning: function(w) {},
-          error: function(e) {},
-          fatalError: function (f) {}
+          warning: function (w) { },
+          error: function (e) { },
+          fatalError: function (f) { }
         }
       }).parseFromString(html, "text/xml")
       xpath.select(`//a/@href`, xml).map(a => (a as any).value).forEach(a => {
@@ -204,6 +209,7 @@ tm.commands.add(
         return
       }
     },
-    privilege: config.commands.smls.privilege
+    privilege: config.commands.smls.privilege,
+    disableForMuted: true
   },
 )

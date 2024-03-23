@@ -80,7 +80,8 @@ tm.commands.add(
                 tm.sendMessage(config.commands.fakerec.formatError, info.login)
             }
         },
-        privilege: config.commands.fakerec.privilege
+        privilege: config.commands.fakerec.privilege,
+        disableForMuted: true
     },
     {
         aliases: config.commands.fakedon.aliases,
@@ -96,7 +97,8 @@ tm.commands.add(
                 amount
             }), config.commands.fakedon.public ? undefined : info.login)
         },
-        privilege: config.commands.fakedon.privilege
+        privilege: config.commands.fakedon.privilege,
+        disableForMuted: true
     },
     {
         aliases: config.commands.fakeleave.aliases,
@@ -110,7 +112,8 @@ tm.commands.add(
                 time: tm.utils.getVerboseTime(sessionTime)
             }), config.commands.fakeleave.public ? undefined : info.login)
         },
-        privilege: config.commands.fakeleave.privilege
+        privilege: config.commands.fakeleave.privilege,
+        disableForMuted: true
     },
     {
         aliases: config.commands.fakejoin.aliases,
@@ -125,7 +128,9 @@ tm.commands.add(
                 visits: player.visits
             }), config.commands.fakejoin.public ? undefined : info.login)
         },
-        privilege: config.commands.fakejoin.privilege
+        privilege: config.commands.fakejoin.privilege,
+        disableForMuted: true
+
     },
     {
         aliases: config.commands.fakeinv.aliases,
@@ -137,7 +142,8 @@ tm.commands.add(
                 nickname: player.nickname, // No strip
             }), config.commands.fakeinv.public ? undefined : info.login, false)
         },
-        privilege: config.commands.fakeinv.privilege
+        privilege: config.commands.fakeinv.privilege,
+        disableForMuted: true
     },
     {
         aliases: config.commands.fakepm.aliases,
@@ -158,7 +164,8 @@ tm.commands.add(
                 message: text
             }), logins.length === 0 ? info.login : logins)
         },
-        privilege: config.commands.fakepm.privilege
+        privilege: config.commands.fakepm.privilege,
+        disableForMuted: true
     },
     {
         aliases: config.commands.fakechat.aliases,
@@ -170,6 +177,7 @@ tm.commands.add(
                 message: text
             }), config.commands.fakechat.public ? undefined : info.login, false)
         },
-        privilege: config.commands.fakechat.privilege
+        privilege: config.commands.fakechat.privilege,
+        disableForMuted: true
     }
 )

@@ -55,7 +55,8 @@ tm.commands.add(
                 }), config.commands.urbandictionary.public ? undefined : info.login
             )
         },
-        privilege: config.commands.urbandictionary.privilege
+        privilege: config.commands.urbandictionary.privilege,
+        disableForMuted: true
     },
     {
         aliases: config.commands.wikipedia.aliases,
@@ -101,7 +102,8 @@ tm.commands.add(
                 }), config.commands.wikipedia.public ? undefined : info.login
             )
         },
-        privilege: config.commands.wikipedia.privilege
+        privilege: config.commands.wikipedia.privilege,
+        disableForMuted: true
     },
     {
         aliases: config.commands.rule34.aliases,
@@ -151,6 +153,7 @@ tm.commands.add(
                 }), config.commands.rule34.public ? undefined : info.login
             )
         },
-        privilege: config.commands.rule34.privilege
+        privilege: config.commands.rule34.privilege,
+        disableForMuted: true
     }
 )

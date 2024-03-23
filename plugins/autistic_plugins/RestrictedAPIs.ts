@@ -42,7 +42,8 @@ tm.commands.add(
                 }), config.commands.googletranslate.public ? undefined : info.login
             )
         },
-        privilege: config.commands.googletranslate.privilege
+        privilege: config.commands.googletranslate.privilege,
+        disableForMuted: true
     },
     {
         aliases: config.commands.duckduckgo.aliases,
@@ -114,6 +115,7 @@ tm.commands.add(
                 }), config.commands.duckduckgo.public ? undefined : info.login
             )
         },
-        privilege: config.commands.duckduckgo.privilege
+        privilege: config.commands.duckduckgo.privilege,
+        disableForMuted: true
     }
 )
