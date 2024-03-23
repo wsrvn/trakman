@@ -82,5 +82,7 @@ export default {
   oplist: 490000,
   adminlist: 500000,
   masteradminlist: 510000,
-  localSectors: 520000
+  localSectors: 520000,
+  ultiRanking: 530000,
+  ultiRecords: 540000,
 }

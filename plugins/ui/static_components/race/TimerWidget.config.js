@@ -3,7 +3,9 @@ import cfg from '../../config/RaceUi.js'
 const p = tm.utils.palette
 
 export default {
-  height: 5.6,
+  height: 6.45,
+  stuntsDynamicMarginTop: 5.5,
+  stuntsHeight: 6.45 + 5.5,
   width: cfg.width,
   title: "Timer",
   icon: icons.clock,
