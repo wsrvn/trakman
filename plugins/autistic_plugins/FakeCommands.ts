@@ -40,12 +40,12 @@ tm.commands.add(
                 // This can fail in one case out of a billion so I don't really care
                 if (position > tm.records.maxLocalsAmount) { return }
                 const rs = tm.utils.getRankingString({ time: finishTime, position: position === 0 ? position + 1 : position }, prevObj)
-                tm.sendMessage(tm.utils.strVar(mconfig.record, {
+                tm.sendMessage(tm.utils.strVar(mconfig.record.message, {
                     nickname: tm.utils.strip(info.nickname, true),
                     status: rs.status,
                     position: tm.utils.getOrdinalSuffix(position),
                     time: tm.utils.getTimeString(finishTime),
-                    difference: rs.difference !== undefined ? tm.utils.strVar(mconfig.recordDifference, {
+                    difference: rs.difference !== undefined ? tm.utils.strVar(mconfig.recordDifference.message, {
                         position: prevPosition,
                         time: rs.difference
                     }) : ''
@@ -66,12 +66,12 @@ tm.commands.add(
                 if (finishTime === prevDediObj?.time) { dediPosition = prevDediPosition }
                 if (dediPosition > dedimania.recordCountLimit) { return }
                 const drs = tm.utils.getRankingString({ time: finishTime, position: dediPosition === 0 ? dediPosition + 1 : dediPosition }, prevDediObj)
-                tm.sendMessage(tm.utils.strVar(mconfig.dediRecord, {
+                tm.sendMessage(tm.utils.strVar(mconfig.dediRecord.message, {
                     nickname: tm.utils.strip(info.nickname, true),
                     status: drs.status,
                     position: tm.utils.getOrdinalSuffix(dediPosition),
                     time: tm.utils.getTimeString(finishTime),
-                    difference: drs.difference !== undefined ? tm.utils.strVar(mconfig.dediDifference, {
+                    difference: drs.difference !== undefined ? tm.utils.strVar(mconfig.dediDifference.message, {
                         position: prevDediPosition,
                         time: drs.difference
                     }) : ''
@@ -105,7 +105,7 @@ tm.commands.add(
         callback: async (info: tm.MessageInfo, player?: tm.Player): Promise<void> => {
             player ??= info
             const sessionTime: number = Date.now() - player.joinTimestamp
-            tm.sendMessage(tm.utils.strVar(mconfig.leave, {
+            tm.sendMessage(tm.utils.strVar(mconfig.leave.message, {
                 nickname: tm.utils.strip(player.nickname, true),
                 time: tm.utils.getVerboseTime(sessionTime)
             }), config.commands.fakeleave.public ? undefined : info.login)
@@ -117,7 +117,7 @@ tm.commands.add(
         help: config.commands.fakejoin.help,
         params: [{ name: 'player', type: 'offlinePlayer' }],
         callback: async (info: tm.MessageInfo, player: tm.OfflinePlayer): Promise<void> => {
-            tm.sendMessage(tm.utils.strVar(mconfig.join, {
+            tm.sendMessage(tm.utils.strVar(mconfig.join.message, {
                 // This won't get any custom titles!
                 title: titles.privileges[player.privilege as keyof typeof titles.privileges],
                 nickname: tm.utils.strip(player.nickname, true),
