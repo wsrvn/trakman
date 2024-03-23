@@ -42,12 +42,11 @@ export default class BannerWidget extends StaticComponent {
   }
 
   getWidth(): number {
-    return (config.rightBorder - config.leftBorder) -
-      (config.resultWidth * 5 + config.marginBig * 5)
+    return (config.rightBorder - config.leftBorder) - (config.width * 5 + config.marginBig * 5 + config.margin)
   }
 
   getPosX(): number {
-    return config.leftBorder + (config.resultWidth * 3 + config.marginBig * 2.3) // ye idk
+    return config.leftBorder + (config.width * 3 + config.marginBig * 2 + config.margin)
   }
 
   display() {

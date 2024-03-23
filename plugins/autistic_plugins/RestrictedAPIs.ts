@@ -42,7 +42,8 @@ tm.commands.add(
                 }), config.commands.googletranslate.public ? undefined : info.login
             )
         },
-        privilege: config.commands.googletranslate.privilege
+        privilege: config.commands.googletranslate.privilege,
+        disableForMuted: true
     },
     {
         aliases: config.commands.duckduckgo.aliases,
@@ -51,7 +52,7 @@ tm.commands.add(
         callback: async (info: tm.MessageInfo, query: string): Promise<void> => {
             // Real FormData, I believe this!
             const form = new URLSearchParams()
-            form.append('q', `"${query.split(' ').join('+')}"`)
+            form.append('q', `${query.split(' ').join('+')}`)
             const url: string = config.commands.duckduckgo.apiUrl // Nothing to modify
             const response = await fetch(url, {
                 method: 'POST',
@@ -114,6 +115,7 @@ tm.commands.add(
                 }), config.commands.duckduckgo.public ? undefined : info.login
             )
         },
-        privilege: config.commands.duckduckgo.privilege
+        privilege: config.commands.duckduckgo.privilege,
+        disableForMuted: true
     }
 )

@@ -152,7 +152,7 @@ export default {
       privilege: 1
     },
     shared: {
-      // THESE SETTINGS ARE SHARED BETWEEN ALL *MLS COMMANDS
+      // THESE SETTINGS ARE SHARED AMONG ALL COMMANDS (POTENTIALLY)
       clearInterval: 2, // Seconds
       updateInterval: 0.0, // Seconds
       notOwnerLimit: 50, // Amount

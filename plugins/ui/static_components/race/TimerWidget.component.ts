@@ -100,6 +100,13 @@ export default class TimerWidget extends StaticComponent {
   }
 
   getHeight(): number {
+    const isStunts = tm.getGameMode() === "Stunts"
+    if (isStunts && tm.timer.isDynamic) {
+      return config.height + config.stuntsDynamicMarginTop
+    }
+    if (isStunts) {
+      return config.stuntsHeight
+    }
     return config.height
   }
 
@@ -115,6 +122,9 @@ export default class TimerWidget extends StaticComponent {
   display() {
     if (!this.isDisplayed) { return }
     if (this.isPaused && tm.timer.isPaused) { return }
+    // if (tm.getGameMode() === 'Stunts' && !tm.timer.isDynamic) {
+    //   return [this.hide()]
+    // }
     const arr = []
     for (const e of tm.players.list) {
       arr.push(this.displayToPlayer(e.login, e.privilege))
@@ -125,11 +135,14 @@ export default class TimerWidget extends StaticComponent {
 
   displayToPlayer(login: string, privilege?: number) {
     if (!this.isDisplayed) { return }
+    // if (tm.getGameMode() === 'Stunts' && !tm.timer.isDynamic) {
+    //   return { xml: this.hide() ?? '', login }
+    // }
     privilege ??= tm.players.get(login)?.privilege ?? 0
     if (this.isOnRestart || !tm.timer.isDynamic || privilege < config.timerActionsPrivilege) {
       return { xml: this.noButtonXml, login }
     } else {
-      return  { xml: this.xmlWithButtons, login }
+      return { xml: this.xmlWithButtons, login }
     }
   }
 
@@ -150,11 +163,15 @@ export default class TimerWidget extends StaticComponent {
       headerHeight = this.header.options.height
       headerXml = isDynamic ? this.getButtonsXml() :
         this.header.constructXml(config.title, config.icon, this.side)
-    } else if(isDynamic) {
+    } else if (isDynamic) {
       verticalButtonsXml = `<frame posn="${width + config.margin} 0 2">${this.getButtonsXml(true)}</frame>`
     }
     let timeXml = ''
-    const bottomH = height - (headerHeight + config.margin)
+    let bottomH = config.height - (headerHeight + config.margin)
+    const isStunts = tm.getGameMode() === 'Stunts'
+    if (!isDynamic && isStunts) {
+      bottomH = config.stuntsHeight
+    }
     if (tm.timer.isDynamic && !this.isOnRestart) {
       if (tm.timer.isPaused) {
         timeXml = centeredText(config.pausedText, width, bottomH,
@@ -176,9 +193,21 @@ export default class TimerWidget extends StaticComponent {
           { specialFont: true, yOffset: config.textYOffset })
       }
     }
+    let stuntsMargin = (isStunts && isDynamic) ? config.stuntsDynamicMarginTop : 0
+    if (isStunts && !isDynamic) {
+      return `
+    <manialink id="${this.id}">
+      <frame posn="${this.positionX} ${this.positionY - stuntsMargin} -38">
+        <format textsize="1" textcolor="FFFF"/> 
+        <frame posn="0 0 -40">
+          <quad posn="0 0 -45" sizen="${config.width} ${bottomH}" bgcolor="${config.background}"/>
+        </frame>
+      </frame>
+    </manialink>`
+    }
     return `
     <manialink id="${this.id}">
-      <frame posn="${this.positionX} ${this.positionY} -38">
+      <frame posn="${this.positionX} ${this.positionY - stuntsMargin} -38">
         <format textsize="1" textcolor="FFFF"/> 
         ${headerXml}
         <frame posn="0 ${-headerHeight - config.margin} -40">
@@ -202,7 +231,7 @@ export default class TimerWidget extends StaticComponent {
     for (const [i, e] of config.buttonOrder.entries()) {
       let x
       if (vertical) {
-        x =( height + config.margin) * i
+        x = (height + config.margin) * i
       } else {
         x = headerW + config.margin + (config.margin + config.buttonWidth) * i
       }
