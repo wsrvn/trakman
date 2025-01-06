@@ -44,10 +44,11 @@ tm.commands.add(
                     nickname: tm.utils.strip(info.nickname, true),
                     status: rs.status,
                     position: tm.utils.getOrdinalSuffix(position),
+                    type: tm.getGameMode() === 'Stunts' ? 'Score' : 'Time',
                     time: tm.utils.getTimeString(finishTime),
                     difference: rs.difference !== undefined ? tm.utils.strVar(mconfig.recordDifference.message, {
                         position: prevPosition,
-                        time: rs.difference
+                        time: tm.getGameMode() === 'Stunts' ? '+' : '-' + rs.difference
                     }) : ''
                 }))
                 // Dedimania
