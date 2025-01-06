@@ -1,12 +1,12 @@
 import { DedimaniaClient } from './DedimaniaClient.js'
 import config from './Config.js'
-import { DediLeaderboard, DediRecord, NewDediRecord } from './DedimaniaTypes.js'
+import type { DediLeaderboard, DediRecord, NewDediRecord } from './DedimaniaTypes.js'
 import './ui/DediCps.component.js'
 import './ui/DediSectors.component.js'
 
 let currentDedis: DediRecord[] = []
 let newDedis: DediRecord[] = []
-let isFailedAuthentication: boolean = false
+let isFailedAuthentication = false
 let uploadLaps = false
 let leaderboard: DediLeaderboard
 const client: DedimaniaClient = new DedimaniaClient()
@@ -82,7 +82,7 @@ const reinitialize = async (): Promise<void> => {
       return
     }
     status = await client.connect(config.host, config.port)
-    if (status !== true && status.isAuthenticationError) {
+    if (status !== true && !status.isAuthenticationError) {
       tm.log.error('Failed to connect to dedimania', status.error.message)
       return
     }
@@ -109,7 +109,7 @@ const getRecords = async (id: string, name: string, environment: string, author:
     do {
       await new Promise((resolve) => setTimeout(resolve, config.reconnectTimeout * 1000))
       status = await client.connect('dedimania.net', config.port)
-      if (status !== true && status.isAuthenticationError) {
+      if (status !== true && !status.isAuthenticationError) {
         tm.log.error('Failed to connect to dedimania', status.error.message)
         return
       }
@@ -160,7 +160,7 @@ const getRecords = async (id: string, name: string, environment: string, author:
     checkpoints: a.Checks.slice(0, a.Checks.length - 1), leaderboard,
     isLapRecord: uploadLaps
   }))
-  if (config.syncName) {
+  if (config.syncName && currentDedis.length > 0) {
     void tm.updatePlayerInfo(...currentDedis)
   }
   emitFetchEvent(currentDedis)
@@ -315,7 +315,7 @@ const playerLeave = async (player: { login: string, nickname: string }): Promise
 
 const getPlayersArray = (): any[] => {
   const players: tm.Player[] = tm.players.list
-  let arr: any[] = []
+  const arr: any[] = []
   for (const player of players) {
     arr.push(
       [
@@ -357,11 +357,27 @@ const getLogString = (previousPosition: number | undefined, position: number,
 }
 
 if (config.isEnabled) {
-
   tm.addListener('Startup', (): void => {
-    if(tm.getGameMode() !== 'Stunts') {
+    if (tm.getGameMode() !== 'Stunts') {
       tm.log.trace('Connecting to Dedimania...')
       void initialize()
+    }
+    if (config.sendLocals) { // Only do this if sending missing locals is enabled
+      fetchListeners.push((): void => {
+        const locals = tm.records.local // Get the local records
+        for (const local of locals) {
+          if (currentDedis.find(a => a.login === local.login && a.time === local.time)) {
+            continue // If this player already has that time on Dedimania, ignore it
+          }
+          // tm.sendMessage(tm.utils.strVar(config.missingLocals, 
+          //   { index: locals.findIndex(a => a.login === local.login && a.time === local.time) + 1, }
+          // ), tm.players.get(local.login) ? local.login : undefined)
+          const fpObj = {
+            login: local.login, nickname: local.nickname
+          }
+          addRecord(fpObj as any, local.time, local.checkpoints)
+        }
+      })
     }
   }, true)
 
@@ -371,7 +387,7 @@ if (config.isEnabled) {
     if (prevLb === 'Disabled' && leaderboard !== 'Disabled') {
       void initialize()
       return
-    } 
+    }
     if (prevLb !== 'Disabled' && leaderboard === 'Disabled') {
       currentDedis.length = 0
       newDedis.length = 0
@@ -385,7 +401,7 @@ if (config.isEnabled) {
   }, true)
 
   tm.addListener('EndMap', (info): void => {
-    let cpAmount = uploadLaps ? info.checkpointsPerLap : info.checkpointsAmount
+    const cpAmount = uploadLaps ? info.checkpointsPerLap : info.checkpointsAmount
     void sendRecords(info.id, info.name, (tm.utils.environmentToNadeoEnvironment(info.environment) as string), info.author, cpAmount)
   })
 
@@ -567,4 +583,4 @@ export const dedimania = {
 
 }
 
-export { NewDediRecord, DediRecord }
+export type { NewDediRecord, DediRecord }
