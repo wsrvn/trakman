@@ -21,7 +21,6 @@ export default {
     // 3.5, <- example margin
     "TMXRanking",
     "LocalRanking",
-    "LiveRanking",
     "ButtonsWidget3",
     "DonationPanel"
   ],

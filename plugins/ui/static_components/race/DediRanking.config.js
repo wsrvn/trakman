@@ -2,7 +2,7 @@ import cfg from '../../config/RaceUi.js'
 import icons from '../../config/Icons.js'
 
 export default {
-  entries: 15,
+  entries: 10,
   teamsEntries: 15,
   roundsEntries: 7,
   cupEntries: 7,
