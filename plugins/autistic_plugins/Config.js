@@ -63,7 +63,7 @@ export default {
       public: true,
       fetchAmount: 500, // 10 would equal to 10 artworks accessible at one given moment (if there even is any artwork available)
       shownTagsAmount: 10, // Amount of tags to show in the message
-      defaultTags: ['1girls'] // Tags to use when none are specified
+      defaultTags: ['1girls', '-ai_generated,', '-anthro', '-3d'] // Tags to use when none are specified
     },
     // Restricted APIs
     googletranslate: {
