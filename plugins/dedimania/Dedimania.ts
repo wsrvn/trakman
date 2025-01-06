@@ -82,7 +82,7 @@ const reinitialize = async (): Promise<void> => {
       return
     }
     status = await client.connect(config.host, config.port)
-    if (status !== true && status.isAuthenticationError) {
+    if (status !== true && !status.isAuthenticationError) {
       tm.log.error('Failed to connect to dedimania', status.error.message)
       return
     }
@@ -109,7 +109,7 @@ const getRecords = async (id: string, name: string, environment: string, author:
     do {
       await new Promise((resolve) => setTimeout(resolve, config.reconnectTimeout * 1000))
       status = await client.connect('dedimania.net', config.port)
-      if (status !== true && status.isAuthenticationError) {
+      if (status !== true && !status.isAuthenticationError) {
         tm.log.error('Failed to connect to dedimania', status.error.message)
         return
       }
@@ -155,11 +155,11 @@ const getRecords = async (id: string, name: string, environment: string, author:
     return
   }
   currentDedis = rawDedis[0].Records.map((a: any): DediRecord =>
-    ({
-      login: a.Login, nickname: a.NickName, time: a.Best,
-      checkpoints: a.Checks.slice(0, a.Checks.length - 1), leaderboard,
-      isLapRecord: uploadLaps
-    }))
+  ({
+    login: a.Login, nickname: a.NickName, time: a.Best,
+    checkpoints: a.Checks.slice(0, a.Checks.length - 1), leaderboard,
+    isLapRecord: uploadLaps
+  }))
   if (config.syncName && currentDedis.length > 0) {
     void tm.updatePlayerInfo(...currentDedis)
   }
@@ -357,11 +357,27 @@ const getLogString = (previousPosition: number | undefined, position: number,
 }
 
 if (config.isEnabled) {
-
   tm.addListener('Startup', (): void => {
-    if(tm.getGameMode() !== 'Stunts') {
+    if (tm.getGameMode() !== 'Stunts') {
       tm.log.trace('Connecting to Dedimania...')
       void initialize()
+    }
+    if (config.sendLocals) { // Only do this if sending missing locals is enabled
+      fetchListeners.push((): void => {
+        const locals = tm.records.local // Get the local records
+        for (const local of locals) {
+          if (currentDedis.find(a => a.login === local.login && a.time === local.time)) {
+            continue // If this player already has that time on Dedimania, ignore it
+          }
+          // tm.sendMessage(tm.utils.strVar(config.missingLocals, 
+          //   { index: locals.findIndex(a => a.login === local.login && a.time === local.time) + 1, }
+          // ), tm.players.get(local.login) ? local.login : undefined)
+          const fpObj = {
+            login: local.login, nickname: local.nickname
+          }
+          addRecord(fpObj as any, local.time, local.checkpoints)
+        }
+      })
     }
   }, true)
 
@@ -371,7 +387,7 @@ if (config.isEnabled) {
     if (prevLb === 'Disabled' && leaderboard !== 'Disabled') {
       void initialize()
       return
-    } 
+    }
     if (prevLb !== 'Disabled' && leaderboard === 'Disabled') {
       currentDedis.length = 0
       newDedis.length = 0
