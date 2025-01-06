@@ -3,12 +3,12 @@ import icons from '../../config/Icons.js'
 
 export default {
   entryHeight: 2.16,
-  entries: 6,
+  entries: 7,
   width: cfg.width,
-  horizontalModeWidth: cfg.rightPosition - cfg.leftPosition - cfg.width * 2 - cfg.margin * 4,
+  horizontalModeWidth: cfg.rightPosition - cfg.leftPosition - cfg.width - cfg.margin * 2,
   posX: cfg.leftPosition + cfg.marginBig + cfg.width,
   horizontalModePosX: cfg.leftPosition + cfg.width + cfg.margin,
-  posY: cfg.topBorder,
+  posY: cfg.topBorder - 2.16,
   side: false,
   title: "Best Cps",
   icon: icons.bestClock,
@@ -27,7 +27,7 @@ export default {
   downIcon: icons.pageRight,
   upIconHover: icons.pageLeftHover,
   downIconHover: icons.pageRightHover,
-  horizontal: false,
+  horizontal: true,
   horizontalMaxRows: 5,
   hidePanel: true,
 }
