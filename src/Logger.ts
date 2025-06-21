@@ -85,10 +85,10 @@ export abstract class Logger {
       }
     })
     process.on('uncaughtException', (err: Error): void => {
-      void this.fatal('Uncaught exception occured: ', err.message, ...(err.stack === undefined ? '' : err.stack.split('\n'))) // indent fix
+      void this.fatal('Uncaught exception occurred: ', err.message, ...(err.stack === undefined ? '' : err.stack.split('\n'))) // indent fix
     })
     process.on('unhandledRejection', (err: Error): void => {
-      void this.fatal('Unhandled rejection occured: ', err.message, ...(err.stack === undefined ? '' : err.stack.split('\n')))
+      void this.fatal('Unhandled rejection occurred: ', err.message, ...(err.stack === undefined ? '' : err.stack.split('\n')))
     })
     if (this.useDiscord) {
       const envDcLog = Number(process.env.DISCORD_LOG_LEVEL)

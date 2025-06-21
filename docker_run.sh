@@ -104,7 +104,7 @@ npm run build --prefix /app/server/trakman
 chmod -R a+w /app/server
 cd trakman
 trap 'echo Terminating; npx pm2 stop 0; npx pm2 kill; exit' SIGTERM SIGINT
-npx pm2 start ./built/src/Main.js --name Trakman
+npm run daemon
 wait \$!" > run.sh
 chown server:server run.sh
 chmod 766 run.sh
