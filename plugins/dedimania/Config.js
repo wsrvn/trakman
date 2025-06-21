@@ -5,7 +5,7 @@ export default {
   // Maximum amount of fetched records 
   // (Dedimania normally stores 30, there are exceptions such as Nadeo maps with 50-80 records)
   dediCount: 30,
-  sendLocals: true, // Send locals that are missing from Dedimania. Make sure you don't have cheaters on your server, I guess.
+  sendLocals: false, // Send locals that are missing from Dedimania. Make sure you don't have cheaters on your server, I guess.
   syncName: true, // If true, sets player nicknames in the database to those fetched from Dedimania
   port: 8002, // Dedimania port (8002 for TMF)
   host: 'dedimania.net',
