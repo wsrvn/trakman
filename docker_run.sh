@@ -100,7 +100,7 @@ chown -R server:server /app/server
 echo "#!/bin/sh
 (while true; do
   /app/server/TrackmaniaServer /game_settings=MatchSettings/MatchSettings.txt /dedicated_cfg=dedicated_cfg.txt /nodaemon
-  echo [\$(date +'%d %b %Y %T')] Server exited with code \$? | tee -a /app/server/.pm2/logs/docker.log
+  echo [\$(date +'%d %b %Y %T.%3N')] Server exited with code \$? | tee -a /app/server/.pm2/logs/docker.log
   echo 'Restarting...'
 done) &
 npm i --prefix /app/server/trakman
