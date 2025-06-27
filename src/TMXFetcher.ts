@@ -80,7 +80,7 @@ export abstract class TMXFetcher {
   /**
    * Fetches map file from TMX via its TMX ID.
    * @param tmxId Map TMX ID
-   * @param site Optional TMX site
+   * @param site Optional TMX site (default depends on packmask)
    * @returns Object containing map name and file content, or Error if unsuccessful
    */
   static async fetchMapFile(tmxId: number, site?: tm.TMXSite): Promise<{ name: string, content: Buffer } | Error>
@@ -157,6 +157,7 @@ export abstract class TMXFetcher {
   /**
    * Fetches TMX for map information.
    * @param tmxId Map TMX ID
+   * @param prefix Map TMX Prefix
    * @returns Map info from TMX or error if unsuccessful
    */
   static async fetchMapInfo(tmxId: number, prefix: TMXPrefix): Promise<Omit<tm.TMXMap, 'id'> | Error>
@@ -286,7 +287,7 @@ export abstract class TMXFetcher {
   * Searches for maps matching the specified name on TMX.
   * @param query Search query
   * @param author Map author to look for
-  * @param site TMX Site to fetch from
+  * @param site TMX Site to fetch from (default depends on packmask)
   * @param count Number of maps to fetch
   * @returns An array of searched map objects or Error if unsuccessful
   */
@@ -324,7 +325,7 @@ export abstract class TMXFetcher {
 
   /**
    * Fetches a random map file from TMX.
-   * @param site Optional TMX site
+   * @param site Optional TMX site (default depends on packmask)
    * @returns Object containing map name and file content, or Error if unsuccessful
    */
   static async fetchRandomMapFile(site: tm.TMXSite = this.packmaskSite): Promise<{ name: string, content: Buffer } | Error> {
