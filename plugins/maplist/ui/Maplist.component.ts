@@ -139,7 +139,7 @@ export default class MapList extends PopupWindow<{ page: number, paginator: Pagi
   async openWithOption(login: string, option: 'jukebox' | 'name' | 'karma'
     | 'short' | 'long' | 'best' | 'worst' | 'worstkarma' | 'nofinish'
     | 'norank' | 'noauthor' | 'oldest' | 'newest', page: number): Promise<void> {
-    let list: readonly Readonly<tm.Map>[] = []
+    let list: readonly Readonly<tm.Map>[]
     if (option === 'best' || option === 'worst') {
       list = await maplist.getByPosition(login, option)
     } else if (option === 'nofinish' || option === 'norank' || option === 'noauthor') {
