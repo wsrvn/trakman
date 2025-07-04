@@ -104,14 +104,16 @@ echo "#!/bin/sh
   /app/server/TrackmaniaServer /game_settings=MatchSettings/MatchSettings.txt /dedicated_cfg=dedicated_cfg.txt /nodaemon
   echo [\$(date +'%d %b %Y %T.%3N')] Server exited with code \$? | tee -a /app/server/.pm2/logs/docker.log
   echo 'Restarting...'
-done) &
-npm i --prefix /app/server/trakman
-npm run build --prefix /app/server/trakman
+done) &" > run.sh
+if [ "$INSTALL_ON_STARTUP" != "NO" ]; then
+  echo "npm i --prefix /app/server/trakman" >> run.sh
+fi
+echo "npm run build --prefix /app/server/trakman
 chmod -R a+w /app/server
 cd trakman
 trap 'echo Terminating; npx pm2 stop 0; npx pm2 kill; exit' SIGTERM SIGINT
 npm run daemon
-wait \$!" > run.sh
+wait \$!" >> run.sh
 chown server:server run.sh
 chmod 766 run.sh
 exec su-exec server ./run.sh
