@@ -87,7 +87,7 @@ export default class CpCounter extends StaticComponent {
       }
       const cpInfo = target.currentCheckpoints.at(-1)
       if (cpInfo === undefined) { return }
-      const ret = this.calculateData({...cpInfo, player: target})
+      const ret = this.calculateData({ ...cpInfo, player: target })
       if (ret === undefined) { return }
       tm.sendManialink(ret.xml, player.login)
     })
@@ -189,7 +189,7 @@ export default class CpCounter extends StaticComponent {
     const timeColour: string = '$' + (isFinish === true ? config.colours.finish : config.colours.default)
     return `${this.header.constructXml(timeColour + tm.utils.getTimeString(currentTime),
       icon, config.side, { rectangleWidth: w, centerText: true })}
-    <frame posn="${w + config.margin + h.squareWidth} 0 3">
+    <frame posn="${w + config.margin * 2 + h.squareWidth} 0 3">
       <quad posn="0 0 3" sizen="${w} ${h.height}" bgcolor="${h.textBackground}"/>
       ${centeredText('$' + config.colours.default + differenceString, w, h.height, h)}
     </frame>`
