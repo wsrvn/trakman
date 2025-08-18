@@ -22,7 +22,7 @@ function initialize(): void {
   authorSort = arr.sort((a, b): number => a.author.localeCompare(b.author))
   nameSort = [...authorSort].sort((a, b): number => a.name.localeCompare(b.name))
   karmaSort = [...authorSort].sort((a, b): number => {
-    return a.voteRatio ?? 0 - b.voteRatio ?? 0
+    return a.voteRatio ?? 0 - (b.voteRatio ?? 0)
   })
   worstKarmaSort = [...karmaSort].reverse()
   atSort = [...authorSort].sort((a, b): number => a.authorTime - b.authorTime)
