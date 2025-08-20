@@ -10,6 +10,13 @@ export default {
     aliases: ['hi', 'hey', 'hello'],
     help: `Greet a certain someone.`
   },
+  greet: {
+      text: `$g[#{nickname}$z$s$g] ${prefix}Hello, #{nickname_joiner}!`,
+      public: true,
+      privilege: 0,
+      aliases: ['greet'],
+      help: `Greet the latest joiner.`
+  },
   bye: {
     text: `$g[#{nickname}$z$s$g] ${prefix}Goodbye, #{name}!`,
     public: true,
