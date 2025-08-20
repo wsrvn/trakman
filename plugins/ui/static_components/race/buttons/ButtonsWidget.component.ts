@@ -12,6 +12,7 @@ import { StatsButton } from './StatsButton.js'
 import { CommandListButton } from './CommandListButton.js'
 import { SectorsButton } from './SectorsButton.js'
 import { UiButton } from './UiButton.js'
+import { FavouriteButton } from "./FavouriteButton.js";
 import config from './ButtonsWidget.config.js'
 
 export default class ButtonsWidget extends StaticComponent {
@@ -31,6 +32,7 @@ export default class ButtonsWidget extends StaticComponent {
       new TimeButton(),
       new PlayerCounter(),
       new VersionButton(),
+      new FavouriteButton(),
       new MapsButton(),
       new StatsButton(),
       new CommandListButton(),
