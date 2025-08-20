@@ -348,7 +348,6 @@ function shuffleQueue(caller?: Caller): boolean {
     .sort((a, b): number => a.rand - b.rand)
     .map(a => a.song)
   listUi.updateSongs(current, queue)
-  updateNextSong(queue[0]?.url)
   emitEvent(queueChangeCallbacks, queue)
   if (caller !== undefined) {
     tm.log.info(`${tm.utils.strip(caller.nickname)} (${caller.login}) shuffled the song list`)
