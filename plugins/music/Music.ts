@@ -90,9 +90,6 @@ export const music = {
       return false
     }
     const song = queue.splice(index, 1)[0]
-    if (index === 0) {
-      updateNextSong(queue[0]?.url)
-    }
     listUi.updateSongs(current, queue)
     emitEvent(songRemoveCallbacks, song, caller)
     emitEvent(queueChangeCallbacks, queue, {
@@ -175,7 +172,7 @@ if (config.isEnabled) {
     emitEvent(queueChangeCallbacks, queue)
   })
 
-  tm.addListener('BeginMap', () => {
+  tm.addListener('EndMap', () => {
     if (current !== undefined) {
       current.isJuked = false
       current.caller = undefined
@@ -187,11 +184,11 @@ if (config.isEnabled) {
       }
     }
     current = queue[0]
+    updateNextSong(current?.url)
     queue.shift()
     listUi.updateSongs(current, queue)
     listUi.updatePreviousSongs(history)
     widgetUi.setCurrentSong(current)
-    updateNextSong(queue[0]?.url)
     emitEvent(queueChangeCallbacks, queue)
   }, true)
   const msg = config.messages
@@ -293,9 +290,6 @@ function addToQueue(songName: string, emitEvents: boolean, caller?: Caller):
   song.caller = caller
   const newIndex = queue.findIndex(a => a.isJuked === false)
   queue.splice(newIndex, 0, song)
-  if (newIndex === 0) {
-    updateNextSong(song.url)
-  }
   listUi.updateSongs(current, queue)
   if (caller !== undefined) {
     tm.log.trace(`${tm.utils.strip(caller.nickname)} (${caller.login}) queued song ${song.name} by ${song.author}`)
@@ -326,9 +320,6 @@ function removeFromQueue(name: string, caller?: Caller): Readonly<Song> | 'not q
     tm.log.trace(`Song ${tm.utils.strip(queue[index].name)} by ${queue[index].author} has been removed from the queue`)
   }
   const song = queue.splice(index, 1)[0]
-  if (index === 0) {
-    updateNextSong(queue[0].url)
-  }
   song.isJuked = false
   song.caller = undefined
   queue.push(song)
