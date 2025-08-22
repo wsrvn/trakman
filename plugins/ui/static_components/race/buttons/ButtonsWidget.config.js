@@ -189,7 +189,6 @@ export default {
     actionId: 4
   },
     medalButton: {
-        icon: icons.karmaGlobal,
         width: 1.8,
         height: 1.8,
         padding: 0.3,
