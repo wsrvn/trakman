@@ -22,8 +22,10 @@ export default {
   defaultTMXSearchLimit: 50,
   /** Whether to reset Cup mode scores after a map is skipped or restarted */
   resetCupScoreOnSkipAndRestart: true,
-  /** Timeout after clicking manialink in miliseconds */
+  /** Timeout after clicking manialink in milliseconds */
   manialinkInteractionTimeout: 50,
+  /** Interval between pings to the server to check its online status in milliseconds */
+  healthcheckInterval: 10000,
   /** Privilege levels for each of the administrative actions */
   privileges: {
     ban: 2,
@@ -79,7 +81,7 @@ export default {
   blacklistFile: "blacklist.txt",
   /** Relative path (/GameData/Config/) to the guestlist file */
   guestlistFile: "guestlist.txt",
-  /** Relative path (/GameData/Tracks/) to the matchsettings file */
+  /** Relative path (/GameData/Tracks/) to the match settings file, ignored if manualMapLoading is enabled */
   matchSettingsFile: "MatchSettings/MatchSettings.txt",
   /** Default message sent as the reason for administrative actions if nothing was specified by the admin */
   defaultReasonMessage: 'No reason specified',
@@ -91,17 +93,5 @@ export default {
   searchOptions: {
     intraMode: 1,
     alpha: "a-zа-яё"
-  },
-  /** Represents default minimal similarity value at which nickname to
-   * login translation will be successful. Used in nickname to login
-   * translation in commands. 0.4 is the default value */
-  nicknameToLoginSimilarityGoal: 0.4,
-  /** Represents minimal similarity difference between best
-   * and second-best match at which translation will be successful.
-   * Used in nickname to login translation in commands. 0.15 is default value */
-  nicknameToLoginMinimumDifferenceBetweenMatches: 0.15,
-  /** Current controller version */
-  version: "1.5.0",
-  /** Controller repository link */
-  repo: "github.com/lythx/trakman",
+  }
 }
