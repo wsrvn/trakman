@@ -51,7 +51,7 @@ export class GameService {
   static async initialize(): Promise<void> {
     Client.callNoRes(`system.multicall`,
       [
-        { method: `SetCallVoteRatios`, params: [{ array: [{ struct: { Command: { string: `*` }, Ratio: { double: -1 } } }] }] },
+        { method: `SetCallVoteRatios`, params: [{ array: [{ struct: { Command: { string: `*` }, Ratio: { double: config.callVoteRatio } } }] }] },
         { method: `SetVehicleNetQuality`, params: [{ int: 1 }] }
       ]
     )

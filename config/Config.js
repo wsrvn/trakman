@@ -77,6 +77,8 @@ export default {
   defaultTimeAttackTimeLimit: 300000,
   /** Minimal time value to which the dynamic timer can be set (in milliseconds) */
   dynamicTimerSubtractionLimit: 30000,
+  /** CallVotes are skip/restart votes that can be done through the ingame UI (ESC>Advanced Options), setting it to -1 disables CallVotes entirely */
+  callVoteRatio: -1,
   /** Relative path (/GameData/Config/) to the blacklist file */
   blacklistFile: "blacklist.txt",
   /** Relative path (/GameData/Config/) to the guestlist file */
