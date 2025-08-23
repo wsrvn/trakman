@@ -237,6 +237,14 @@ export default class CpCounter extends StaticComponent {
     const spectators = tm.players.get(login)?.spectators
     const logins = spectators !== undefined ? Array.from(spectators) : []
     logins.unshift(login)
+
+    let times = ''
+    if (config.times) {
+        times = `<frame posn="0 ${-(config.height + config.margin)} 2">
+                ${cpAmount === 0 ? '' : this.constructTimeXml(login, false, config.iconBottom,
+            params?.isFinish, params?.current, params?.best)}</frame>`
+    }
+
     return {
       xml: `
         <manialink id="${this.id}">
@@ -246,10 +254,7 @@ export default class CpCounter extends StaticComponent {
               ${this.header.constructXml('$' + config.colours.default + text, config.icon, config.side,
         { rectangleWidth, centerText })}
               ${counterXml}
-              <frame posn="0 ${-(config.height + config.margin)} 2">
-                ${cpAmount === 0 ? '' : this.constructTimeXml(login, false, config.iconBottom,
-          params?.isFinish, params?.current, params?.best)}
-              </frame>
+              ${times}
             </frame>
         </manialink>`, login: logins
     }

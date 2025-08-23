@@ -11,6 +11,7 @@ export default {
   posY: -37,
   margin: cfg.margin,
   side: true,
+  times: true,
   rectangleWidth: 7.7,
   icon: icons.waypoint,
   iconBottom: icons.clock,
