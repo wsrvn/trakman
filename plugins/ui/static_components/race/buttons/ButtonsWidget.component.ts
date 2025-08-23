@@ -50,9 +50,12 @@ export default class ButtonsWidget extends StaticComponent {
     UiButton.onUpdate(() => {
       this.constructXml()
       const xml = this.display()
-      if(xml !== undefined) {
+      if (xml !== undefined) {
         tm.sendManialink(xml)
       }
+    })
+    this.onPanelHide((player) => { // todo: this does not work properly due to button update
+      this.sendMultipleManialinks(this.displayToPlayer(player.login))
     })
   }
 
@@ -69,6 +72,9 @@ export default class ButtonsWidget extends StaticComponent {
 
   displayToPlayer(login: string) {
     if (!this.isDisplayed) { return }
+    if (config.hidePanel && this.hasPanelsHidden(login)) {
+      return this.hideToPlayer(login)
+    }
     return { xml: this.xml, login }
   }
 

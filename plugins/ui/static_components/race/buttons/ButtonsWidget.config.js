@@ -187,5 +187,6 @@ export default {
             500
         ],
         actionId: 4
-    }
+    },
+    hidePanel: false
 }
