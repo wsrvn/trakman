@@ -4,49 +4,56 @@ const prefix = `$i` // Prefix all "fake" player messages with this (eg. $i, $t, 
 export default {
   defaultValue: `everyone`, // This value will be used for the name if you don't specify anything in e.g. /hi
   hi: {
-    text: `$g[#{nickname}$z$s$g] ${prefix}Hello, #{name}!`,
+    text: `$g[#{nickname}$z$s$g] ${prefix}Hello, #{name}$g!`,
     public: true,
     privilege: 0,
     aliases: ['hi', 'hey', 'hello'],
     help: `Greet a certain someone.`
   },
+  greet: {
+      text: `$g[#{nickname}$z$s$g] ${prefix}Hello, #{nickname_joiner}$g!`,
+      public: true,
+      privilege: 0,
+      aliases: ['greet'],
+      help: `Greet the latest joiner.`
+  },
   bye: {
-    text: `$g[#{nickname}$z$s$g] ${prefix}Goodbye, #{name}!`,
+    text: `$g[#{nickname}$z$s$g] ${prefix}Goodbye, #{name}$g!`,
     public: true,
     privilege: 0,
     aliases: ['bb', 'bye'],
     help: `Bid your farewell.`
   },
   thx: {
-    text: `$g[#{nickname}$z$s$g] ${prefix}Thanks, #{name}!`,
+    text: `$g[#{nickname}$z$s$g] ${prefix}Thanks, #{name}$g!`,
     public: true,
     privilege: 0,
     aliases: ['ty', 'tx', 'thx', 'thanks'],
     help: `Express your gratitude.`
   },
   gg: {
-    text: `$g[#{nickname}$z$s$g] ${prefix}Good game, #{name}!`,
+    text: `$g[#{nickname}$z$s$g] ${prefix}Good game, #{name}$g!`,
     public: true,
     privilege: 0,
     aliases: ['gg', 'goodgame'],
     help: `Inform others that you\'ve enjoyed the race.`
   },
   bg: {
-    text: `$g[#{nickname}$z$s$g] ${prefix}Bad game, #{name}!`,
+    text: `$g[#{nickname}$z$s$g] ${prefix}Bad game, #{name}$g!`,
     public: true,
     privilege: 0,
     aliases: ['bg', 'badgame'],
     help: `Allow others to find out about your disenjoyment of the round.`
   },
   n1: {
-    text: `$g[#{nickname}$z$s$g] ${prefix}Nice one, #{name}!`,
+    text: `$g[#{nickname}$z$s$g] ${prefix}Nice one, #{name}$g!`,
     public: true,
     privilege: 0,
     aliases: ['n1', 'nice1', 'niceone'],
     help: `Rain your blessings upon the few selected by thy divine ritual.`
   },
   gr: {
-    text: `$g[#{nickname}$z$s$g] ${prefix}Good race, #{name}!`,
+    text: `$g[#{nickname}$z$s$g] ${prefix}Good race, #{name}$g!`,
     public: true,
     privilege: 0,
     aliases: ['gr', 'goodrace'],
