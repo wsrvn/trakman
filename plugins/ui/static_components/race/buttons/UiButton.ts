@@ -42,7 +42,7 @@ export abstract class UiButton {
    * of static rendering based on `ButtonData` (see `MedalButton.ts`)
    */
   public renderForPlayer(login: string, i: number, j: number, w: number, h: number): string {
-      return ``
+    return ``
   }
 
 }

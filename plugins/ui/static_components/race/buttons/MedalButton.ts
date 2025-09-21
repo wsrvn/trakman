@@ -38,27 +38,46 @@ export class MedalButton extends UiButton {
     const height = h - config.margin
     const topPadding = this.buttonData.padding
 
+    type MedalInfo = {
+      limit: number,
+      text: string,
+      icon: string
+    }
 
-    type MedalInfo = { limit: number, text: string, icon: string }
-
-    const thresholds: MedalInfo[] = [
-      { limit: map.authorTime ?? Infinity, text: cfg.textAuthorMedal, icon: "MedalNadeo" },
-      { limit: map.goldTime ?? Infinity, text: cfg.textGoldMedal, icon: "MedalGold" },
-      { limit: map.silverTime ?? Infinity, text: cfg.textSilverMedal, icon: "MedalSilver" },
-      { limit: map.bronzeTime ?? Infinity, text: cfg.textBronzeMedal, icon: "MedalBronze" },
-    ]
+    const thresholds: MedalInfo[] = [{
+      limit: map.authorTime ?? Infinity,
+      text: cfg.textAuthorMedal,
+      icon: "MedalNadeo"
+    }, {
+      limit: map.goldTime ?? Infinity,
+      text: cfg.textGoldMedal,
+      icon: "MedalGold"
+    }, {
+      limit: map.silverTime ?? Infinity,
+      text: cfg.textSilverMedal,
+      icon: "MedalSilver"
+    }, {
+      limit: map.bronzeTime ?? Infinity,
+      text: cfg.textBronzeMedal,
+      icon: "MedalBronze"
+    }]
 
     let medalText = cfg.textNoMedal
     let iconSub = "MedalSlot"
 
     if (record > 0) {
       const hit = thresholds.find(t => record <= t.limit)
-      if (hit) { medalText = hit.text; iconSub = hit.icon }
+      if (hit) {
+        medalText = hit.text;
+        iconSub = hit.icon
+      }
     }
 
-    const t1: string = horizontallyCenteredText(medalText, width, height,
-      { yOffset: cfg.textYOffset, textScale: buttonConfig.textScale, padding: buttonConfig.padding })
-
+    const t1: string = horizontallyCenteredText(medalText, width, height, {
+      yOffset: cfg.textYOffset,
+      textScale: buttonConfig.textScale,
+      padding: buttonConfig.padding
+    })
 
     return `<quad posn="0 0 1" sizen="${width} ${height}" bgcolor="${buttonConfig.background}"/>
   <quad posn="${(width - (cfg.width)) / 2} ${-(topPadding)} 5" 
