@@ -3,7 +3,7 @@
  * @since 0.1
  */
 
-import { componentIds, StaticHeader, StaticComponent, centeredText, addManialinkListener } from '../../UI.js'
+import { addManialinkListener, centeredText, componentIds, StaticComponent, StaticHeader } from '../../UI.js'
 import config from './TimerWidget.config.js'
 
 export default class TimerWidget extends StaticComponent {
@@ -43,35 +43,6 @@ export default class TimerWidget extends StaticComponent {
         this.xmlWithButtons = this.constructXml(true)
         return this.display()
       }
-    })
-    const setAdjustedTimeLimit = () => {
-      if (tm.getGameMode() !== 'TimeAttack') { return }
-      const authorTime = tm.maps.current.authorTime
-      const globalconfig = tm.config.controller
-      let newLimit = globalconfig.defaultTimeAttackTimeLimit
-      let multiplier = config.authorTimeMultiplier
-      if (config.useAuthorTimeMultiplier) {
-        newLimit = Math.max(
-          authorTime * multiplier,
-          globalconfig.defaultTimeAttackTimeLimit,
-          globalconfig.dynamicTimerSubtractionLimit
-        )
-        if (config.sendTimeLimitMessage) {
-          tm.sendMessage(tm.utils.strVar(config.newTimeLimitMessage, {
-            limit: Math.floor(newLimit / 1000),
-            multiplier
-          }))
-        }
-      } else {
-        newLimit = Math.max(
-          globalconfig.defaultTimeAttackTimeLimit,
-          globalconfig.dynamicTimerSubtractionLimit
-        )
-      }
-      tm.timer.setTimeLimit(newLimit)
-    }
-    tm.addListener('ServerStateChanged', state => {
-      if (state === 'race') { setAdjustedTimeLimit() }
     })
     this.renderOnEvent('BeginMap', () => {
       this.isOnRestart = false
@@ -169,9 +140,15 @@ export default class TimerWidget extends StaticComponent {
     // }
     privilege ??= tm.players.get(login)?.privilege ?? 0
     if (this.isOnRestart || !tm.timer.isDynamic || privilege < config.timerActionsPrivilege) {
-      return { xml: this.noButtonXml, login }
+      return {
+        xml: this.noButtonXml,
+        login
+      }
     } else {
-      return { xml: this.xmlWithButtons, login }
+      return {
+        xml: this.xmlWithButtons,
+        login
+      }
     }
   }
 
@@ -183,8 +160,7 @@ export default class TimerWidget extends StaticComponent {
 
   private constructXml(isDynamic: boolean): string {
     const headerHeight: number = this.header.options.height
-    let headerXml = isDynamic ? this.getButtonsXml() :
-      this.header.constructXml(config.title, config.icon, this.side)
+    let headerXml = isDynamic ? this.getButtonsXml() : this.header.constructXml(config.title, config.icon, this.side)
     let timeXml = ''
     let bottomH = config.height - (headerHeight + config.margin)
     const isStunts = tm.getGameMode() === 'Stunts'
@@ -193,8 +169,11 @@ export default class TimerWidget extends StaticComponent {
     }
     if (tm.timer.isDynamic && !this.isOnRestart) {
       if (tm.timer.isPaused) {
-        timeXml = centeredText(config.pausedText, config.width, bottomH,
-          { specialFont: true, yOffset: -0.3, xOffset: 0.2 })
+        timeXml = centeredText(config.pausedText, config.width, bottomH, {
+          specialFont: true,
+          yOffset: -0.3,
+          xOffset: 0.2
+        })
       } else {
         const time = Math.floor(tm.timer.remainingRaceTime / 1000)
         let timeColour = config.timeColours[0]
@@ -208,8 +187,10 @@ export default class TimerWidget extends StaticComponent {
         const minutes = (~~(time / 60) % 60).toString().padStart(2, '0')
         const seconds = (time % 60).toString().padStart(2, '0')
         const timeStr = hoursAmount < 100 ? `${hours}${minutes}:${seconds}` : `${hoursAmount} hours`
-        timeXml = centeredText('$' + timeColour + timeStr, config.width, bottomH,
-          { specialFont: true, yOffset: config.textYOffset })
+        timeXml = centeredText('$' + timeColour + timeStr, config.width, bottomH, {
+          specialFont: true,
+          yOffset: config.textYOffset
+        })
       }
     }
     let stuntsMargin = (isStunts && isDynamic) ? config.stuntsDynamicMarginTop : 0
@@ -266,8 +247,8 @@ export default class TimerWidget extends StaticComponent {
       buttonXml += `<quad posn="${x} 0 0" sizen="${w} ${h}" bgcolor="${this.header.options.iconBackground}" />
       <quad posn="${x + m} ${-m} 1" sizen="${w - 2 * m} ${h - 2 * m}" imagefocus="${hoverIcon}" image="${icon}" action="${id}"/>`
     }
-    return this.header.constructXml(config.title, config.icon,
-      this.side, { rectangleWidth: headerRectWidth }) + buttonXml
+    return this.header.constructXml(config.title, config.icon, this.side,
+      { rectangleWidth: headerRectWidth }) + buttonXml
   }
 
 }

@@ -1,5 +1,6 @@
 import icons from '../../config/Icons.js'
 import cfg from '../../config/RaceUi.js'
+
 const p = tm.utils.palette
 
 export default {
@@ -7,7 +8,7 @@ export default {
   stuntsDynamicMarginTop: 5.5,
   stuntsHeight: 6.45 + 5.5,
   width: cfg.width,
-  title: "Timer",
+  title: 'Timer',
   icon: icons.clock,
   margin: cfg.margin,
   background: cfg.background,
@@ -17,15 +18,11 @@ export default {
   buttonOrder: ['pause', 'add', 'subtract'],
   pausedText: 'PAUSED',
   textYOffset: -0.3,
-  useAuthorTimeMultiplier: true,
-  authorTimeMultiplier: 3,
-  newTimeLimitMessage: `${p.admin}TimeAttack limit set to ${p.highlight}#{limit}${p.admin} seconds (Multiplier: ${p.highlight}#{multiplier}${p.admin}).`,
-  sendTimeLimitMessage: true,
   icons: {
     pause: icons.pause,
     resume: icons.play,
     add: icons.plus,
-    subtract: icons.minus,
+    subtract: icons.minus
   },
   iconsHover: {
     pause: icons.pauseGreen,
@@ -40,5 +37,5 @@ export default {
   timeSubtractedOnClick: 5 * 60 * 1000, //msec
   pause: `${p.admin}#{title} ${p.highlight}#{adminName} ${p.admin}has ${p.highlight}paused ${p.admin}the timer.`,
   resume: `${p.admin}#{title} ${p.highlight}#{adminName} ${p.admin}has ${p.highlight}resumed ${p.admin}the timer.`,
-  set: `${p.admin}#{title} ${p.highlight}#{adminName} ${p.admin}has set the remaining time to ${p.highlight}#{time}${p.admin}.`,
+  set: `${p.admin}#{title} ${p.highlight}#{adminName} ${p.admin}has set the remaining time to ${p.highlight}#{time}${p.admin}.`
 }
