@@ -616,6 +616,8 @@ function strVar(str: string, vars: {
   return str
 }
 
+const matchStringCache: Map<string, string> = new Map()
+
 /**
  * Searches for a given string in a given array of values
  * @param needle What string to search for
@@ -628,7 +630,18 @@ function matchString(needle: string, haystack: string[], stripTrackmaniaFormatti
   haystack = uFuzzy.latinize(haystack)
   const arr = []
   if (stripTrackmaniaFormatting) {
-    haystack = haystack.map(val => Utils.strip(val, true))
+    haystack = haystack.map(val => {
+      const cachedVal = matchStringCache.get(val)
+      if (cachedVal !== undefined) {
+        return cachedVal
+      }
+      const strippedVal = Utils.strip(val, true)
+      matchStringCache.set(val, strippedVal)
+      if (matchStringCache.size > config.matchStringCacheSize) {
+        matchStringCache.clear()
+      }
+      return strippedVal
+    })
   }
   const idxs = uf.filter(haystack, needle)
   if (idxs != null && idxs.length > 0) {

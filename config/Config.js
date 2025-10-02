@@ -95,5 +95,7 @@ export default {
   searchOptions: {
     intraMode: 1,
     alpha: 'a-zа-яё'
-  }
+  },
+  /** When using matchString() util with `stripTrackmaniaFormatting = true`, values are cached to increase performance */
+  matchStringCacheSize: 10000
 }
