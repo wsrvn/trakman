@@ -620,12 +620,16 @@ function strVar(str: string, vars: {
  * Searches for a given string in a given array of values
  * @param needle What string to search for
  * @param haystack Array where to search
+ * @param stripTrackmaniaFormatting Removes all Trackmania specific formatting (e.g. $w, $fff, etc.) from the haystack strings
  * @returns Indices that match the search
  */
-function matchString(needle: string, haystack: string[]): number[] {
+function matchString(needle: string, haystack: string[], stripTrackmaniaFormatting: boolean = false): number[] {
   if (haystack.length === 0) { return [] }
   haystack = uFuzzy.latinize(haystack)
   const arr = []
+  if (stripTrackmaniaFormatting) {
+    haystack = haystack.map(val => Utils.strip(val, true))
+  }
   const idxs = uf.filter(haystack, needle)
   if (idxs != null && idxs.length > 0) {
     const infoThresh = 1e4
