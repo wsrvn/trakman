@@ -10,19 +10,17 @@ const modeFunctions: { [mode in DynamicTimeLimitMode]: (map: tm.Map) => number }
   author: map => map.authorTime * dynamicTimeLimitMultiplier
 }
 
-function setStaticTimeLimitForNextMap()  {
+function setStaticTimeLimitForNextMap() {
   const nextMap = tm.jukebox.queue[0]
   const timeLimit = modeFunctions[dynamicTimeLimitMode](nextMap)
-  tm.timer.setTimeLimit(timeLimit)  
+  tm.timer.setTimeLimit(timeLimit)
 }
 
-tm.addListener("BeginMap", info => {
+tm.addListener("ServerStateChanged", state => {
   if (!isActive) { return }
-  if (tm.timer.isDynamic) {
-    const timeLimit = modeFunctions[dynamicTimeLimitMode](info)
-    tm.timer.setTime(timeLimit)
-  } else {
-    setStaticTimeLimitForNextMap()
+  if (state === "race" && tm.timer.isDynamic) {
+    const timeLimit = modeFunctions[dynamicTimeLimitMode](tm.maps.current)
+    tm.timer.setTimeLimit(timeLimit)
   }
 })
 
