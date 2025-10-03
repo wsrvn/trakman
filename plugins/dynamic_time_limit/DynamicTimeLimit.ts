@@ -16,7 +16,7 @@ function setStaticTimeLimitForNextMap() {
   tm.timer.setTimeLimit(timeLimit)
 }
 
-function setDynamicTimeLimitForNextMap() {
+function setDynamicTimeLimitForCurrentMap() {
   const timeLimit = modeFunctions[dynamicTimeLimitMode](tm.maps.current)
   tm.timer.setTimeLimit(timeLimit)
 }
@@ -24,7 +24,7 @@ function setDynamicTimeLimitForNextMap() {
 tm.addListener("ServerStateChanged", state => {
   if (!isActive) { return }
   if (state === "race" && tm.timer.isDynamic) {
-    setDynamicTimeLimitForNextMap()
+    setDynamicTimeLimitForCurrentMap()
   }
   else if (state === "result" && !tm.timer.isDynamicOnNextRound) {
     setStaticTimeLimitForNextMap()
@@ -37,13 +37,8 @@ tm.addListener("JukeboxChanged", () => {
 })
 
 tm.addListener("DynamicTimerStateChanged", state => {
-  if (!isActive) { return }
-  if (state === "enabled") {
-    setDynamicTimeLimitForNextMap()
-  }
-  else if (state === "disabled") {
-    setStaticTimeLimitForNextMap()
-  }
+  if (!isActive || state !== 'disabled') { return }
+  setStaticTimeLimitForNextMap()
 })
 
 tm.addListener("BeginMap", () => {
@@ -53,6 +48,43 @@ tm.addListener("BeginMap", () => {
     limit: tm.utils.getVerboseTime(timeLimit),
     authorTime: tm.utils.getTimeString(tm.maps.current.authorTime)
   }))
+})
+
+tm.commands.add({
+  aliases: config.enableCommand.aliases,
+  help: config.enableCommand.help,
+  callback: info => {
+    if (isActive) {
+      tm.sendMessage(config.enableCommand.alreadyActive, info.login)
+      return
+    }
+    isActive = true
+    if (!tm.timer.isDynamic) {
+      setStaticTimeLimitForNextMap()
+    }
+    tm.sendMessage(tm.utils.strVar(config.enableCommand.success, {
+      title: info.title,
+      name: tm.utils.strip(info.nickname)
+    }), config.enableCommand.public ? undefined : info.login)
+  },
+  privilege: config.enableCommand.privilege
+})
+
+tm.commands.add({
+  aliases: config.disableCommand.aliases,
+  help: config.disableCommand.help,
+  callback: info => {
+    if (!isActive) {
+      tm.sendMessage(config.disableCommand.alreadyDisabled, info.login)
+      return
+    }
+    isActive = false
+    tm.sendMessage(tm.utils.strVar(config.disableCommand.success, {
+      title: info.title,
+      name: tm.utils.strip(info.nickname)
+    }), config.disableCommand.public ? undefined : info.login)
+  },
+  privilege: config.disableCommand.privilege
 })
 
 /**
