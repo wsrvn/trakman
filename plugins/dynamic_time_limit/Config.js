@@ -4,7 +4,7 @@ export default {
   // If false plugin cant be activated
   isEnabled: true,
   // This can be changed using an ingame command
-  isActive: true,
+  isActive: false,
   // Time calculation mode. For now it has only one option: "author"
   defaultMode: 'author',
   // Time multiplier eg. if mode = "author" and multilpier = 10, then the time will be
