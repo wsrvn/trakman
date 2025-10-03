@@ -10,6 +10,10 @@ export default {
   // Time multiplier eg. if mode = "author" and multilpier = 10, then the time will be
   // set to `authorTime * 10`
   defaultMultiplier: 10,
-  newTimeLimitMessage: `${p.admin}TimeAttack limit set to ${p.highlight}#{limit}${p.admin} seconds (Multiplier: ${p.highlight}#{multiplier}${p.admin}).`,
-  sendTimeLimitMessage: true, // TODO
+  // Message gets sent at round start
+  sendTimeLimitMessage: true,
+  // Each mode can have its own message
+  messages: {
+    author: `${p.admin}The current map's ${p.highlight}AT ${p.admin}is ${p.highlight}#{authorTime}${p.admin}, time limit set to ${p.highlight}#{limit}${p.admin}.`,
+  },
 }

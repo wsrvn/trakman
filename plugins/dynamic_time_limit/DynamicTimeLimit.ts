@@ -46,6 +46,15 @@ tm.addListener("DynamicTimerStateChanged", state => {
   }
 })
 
+tm.addListener("BeginMap", () => {
+  if (!isActive || !config.sendTimeLimitMessage) { return }
+  const timeLimit = modeFunctions[dynamicTimeLimitMode](tm.maps.current)
+  tm.sendMessage(tm.utils.strVar(config.messages[dynamicTimeLimitMode], {
+    limit: tm.utils.getVerboseTime(timeLimit),
+    authorTime: tm.utils.getTimeString(tm.maps.current.authorTime)
+  }))
+})
+
 /**
  * Sets dynamic time limits (eg. based on author time)
  * @author lythx
@@ -71,18 +80,30 @@ export const dynamicTimeLimit = {
     return true
   },
 
+  /**
+   * Gets or sets the mode used to calculate the time limit.
+   */
   set mode(mode: DynamicTimeLimitMode) {
     dynamicTimeLimitMode = mode
   },
 
+  /**
+   * Gets or sets the mode used to calculate the time limit.
+   */
   get mode(): DynamicTimeLimitMode {
     return dynamicTimeLimitMode
   },
 
+  /**
+   * Gets or sets the multiplier used to calculate the time limit.
+   */
   set multiplier(multiplier: number) {
     dynamicTimeLimitMultiplier = multiplier
   },
 
+  /**
+   * Gets or sets the multiplier used to calculate the time limit.
+   */
   get multiplier(): number {
     return dynamicTimeLimitMultiplier
   },
