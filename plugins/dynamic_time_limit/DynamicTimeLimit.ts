@@ -16,17 +16,34 @@ function setStaticTimeLimitForNextMap() {
   tm.timer.setTimeLimit(timeLimit)
 }
 
+function setDynamicTimeLimitForNextMap() {
+  const timeLimit = modeFunctions[dynamicTimeLimitMode](tm.maps.current)
+  tm.timer.setTimeLimit(timeLimit)
+}
+
 tm.addListener("ServerStateChanged", state => {
   if (!isActive) { return }
   if (state === "race" && tm.timer.isDynamic) {
-    const timeLimit = modeFunctions[dynamicTimeLimitMode](tm.maps.current)
-    tm.timer.setTimeLimit(timeLimit)
+    setDynamicTimeLimitForNextMap()
+  }
+  else if (state === "result" && !tm.timer.isDynamicOnNextRound) {
+    setStaticTimeLimitForNextMap()
   }
 })
 
 tm.addListener("JukeboxChanged", () => {
   if (!isActive) { return }
   setStaticTimeLimitForNextMap()
+})
+
+tm.addListener("DynamicTimerStateChanged", state => {
+  if (!isActive) { return }
+  if (state === "enabled") {
+    setDynamicTimeLimitForNextMap()
+  }
+  else if (state === "disabled") {
+    setStaticTimeLimitForNextMap()
+  }
 })
 
 /**
