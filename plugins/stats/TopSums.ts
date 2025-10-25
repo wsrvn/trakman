@@ -182,30 +182,10 @@ export const topSums = {
 
 function sortToplist() {
   topList.sort((a, b) => {
-    if (a.sums[0] < b.sums[0]) {
-      return 1
-    }
-    if (a.sums[0] > b.sums[0]) {
-      return -1
-    }
-    if (a.sums[1] < b.sums[1]) {
-      return 1
-    }
-    if (a.sums[1] > b.sums[1]) {
-      return -1
-    }
-    if (a.sums[2] < b.sums[2]) {
-      return 1
-    }
-    if (a.sums[2] > b.sums[2]) {
-      return -1
-    }
-    if (a.sums[3] < b.sums[3]) {
-      return 1
-    }
-    if (a.sums[3] > b.sums[3]) {
-      return -1
-    }
+    if (a.sums[0] !== b.sums[0]) return b.sums[0] - a.sums[0]
+    if (a.sums[1] !== b.sums[1]) return b.sums[1] - a.sums[1]
+    if (a.sums[2] !== b.sums[2]) return b.sums[2] - a.sums[2]
+    if (a.sums[3] !== b.sums[3]) return b.sums[3] - a.sums[3]
     return 0
   })
 }
