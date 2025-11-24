@@ -86,9 +86,9 @@ export const Utils = {
     if (str === undefined) { return '' }
     let regex: RegExp
     if (removeColours) {
-      regex = /\${1}(L|H|P)\[.*?\](.*?)\$(L|H|P)|\${1}(L|H|P)\[.*?\](.*?)|\${1}(L|H|P)(.*?)|\${1}[SHWIPLONGTZ]|\$(?:[\da-f][^$][^$]|[\da-f][^$]|[^][hlp]|(?=[][])|$)|\${1}[^\💀]/gi
+      regex = /\$(?:[lhp](?:\[.*?\])?|[iowsnmgtz<>]|[0-9a-f][^$]{0,2})/gi
     } else {
-      regex = /\${1}(L|H|P)\[.*?\](.*?)\$(L|H|P)|\${1}(L|H|P)\[.*?\](.*?)|\${1}(L|H|P)(.*?)|\${1}[SHWIPLONGTZ]/gi
+      regex = /\$(?:[lhp](?:\[.*?\])?|[iowsnmgtz<>])/gi
     }
     return str.replace('$$', '💀').replace(regex, '').replace('💀', '$$$$')
   },
