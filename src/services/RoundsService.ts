@@ -246,8 +246,14 @@ export class RoundsService {
         if (attempts !== 0) {
           Logger.error(`Could not get current ranking, trying again.`)
         }
-        if (++attempts >= 5) {
+        if (++attempts >= 8) {
           await Logger.fatal(`Could not get current ranking. Error: ${ranking}`)
+        } else if (attempts >= 5) {
+          // if there is no player in the ranking, it will fail until the dedicated server recalculated with BeginMap, this makes sure trakman doesn't crash in that case (PS: this is really stupid aswell)
+          Logger.warn('Could not get ranking, waiting for next BeginMap.')
+          await new Promise<void>((resolve) => {
+            tm.once('BeginMap', () => resolve())
+          })
         }
       } while (ranking instanceof Error)
       for (const e of ranking) {
