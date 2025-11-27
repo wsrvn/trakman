@@ -69,6 +69,22 @@ const removeListener = (callback: Function): void => {
 }
 
 /**
+ * Registers a one-time event listener.
+ * The callback is executed the next time the event occurs and is then removed automatically.
+ * @param event  Event name or array of event names to listen to
+ * @param callback  Function to execute when the event fires
+ */
+const once = <T extends keyof tm.Events>(event: T | (keyof tm.Events)[],
+  callback: ((params: T extends keyof tm.Events ? tm.Events[T] : any) => void | Promise<void>)): void => {
+  const onceCallback = async (params: any) => {
+    removeListener(onceCallback)
+    await callback(params)
+  }
+
+  addListener(event, onceCallback)
+}
+
+/**
  * Execute the event callbacks
  * @param event callback event name
  * @param params callback params
@@ -92,5 +108,6 @@ export const Events = {
   initialize,
   addListener,
   removeListener,
+  once,
   emit
 }

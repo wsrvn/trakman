@@ -719,6 +719,14 @@ namespace trakman {
   export const removeListener = Events.removeListener
 
   /**
+   * Adds a one-time listener for the given event.
+   * The listener is invoked at most once: after it fires, it is automatically removed.
+   * @param event Event or array of events to attach the listener to
+   * @param callback Function to execute when the event occurs
+   */
+  export const once = Events.once
+
+  /**
    * Emits ManialinkClick for given player and actionId.
    * Used for manialink interaction such as opening UI windows.
    * @param id Manialink ID
