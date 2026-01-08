@@ -104,7 +104,8 @@ export default class ButtonsWidget extends StaticComponent {
           topPadding: data.padding,
           equalTexts: data.equalTexts === true ? true : undefined,
           actionId: data.actionId,
-          link: data.link
+          link: data.link,
+          manialink: data.manialink
         }))
       }
     }
