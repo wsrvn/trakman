@@ -38,8 +38,7 @@ export class MapService {
     await this.createList()
     await this.setCurrent()
     this.fillQueue()
-    await this.writeMatchSettings()
-    await this.updateNextMap()
+    await this.handleNextMap()
     // Recreate list when Match Settings get changed only with non-dynamic map loading
     if (!config.manualMapLoading.enabled) {
       Client.addProxy(['LoadMatchSettings'], async (): Promise<void> => {
@@ -54,9 +53,11 @@ export class MapService {
   /**
    * Write MatchSettings file if dynamic map loading is enabled
    */
-  private static async writeMatchSettings() {
+  private static async handleNextMap(isReset = false) {
     if (config.manualMapLoading.enabled) {
-      await ManualMapLoading.writeMS(this._current, this._queue.map(a => a.map))
+      await ManualMapLoading.writeMS(this._current, this._queue.map(a => a.map), isReset)
+    } else {
+      await this.updateNextMap()
     }
   }
 
@@ -230,7 +231,7 @@ export class MapService {
     await this.repo.splitAdd(addedMapObjects)
     await this.repo.splitRemove(removedMaps)
     removedMaps.forEach(a => void this.remove(a))
-    await this.writeMatchSettings()
+    await this.handleNextMap()
     Events.emit('MapAdded', addedMapObjects)
   }
 
@@ -521,7 +522,10 @@ export class MapService {
       this.fillQueue()
     }
     Events.emit('JukeboxChanged', this.jukebox.map(a => a.map))
-    await this.updateNextMap()
+    // necessary??
+    if (!config.manualMapLoading.enabled) {
+      await this.updateNextMap()
+    }
   }
 
   static restartMap() {
@@ -601,8 +605,7 @@ export class MapService {
       callerLogin: caller?.login
     })
     Events.emit('JukeboxChanged', this.jukebox.map(a => a.map))
-    await this.writeMatchSettings()
-    void this.updateNextMap()
+    await this.handleNextMap(setAsNextMap)
     if (caller !== undefined) {
       Logger.trace(`${Utils.strip(caller.nickname)} (${caller.login}) added map ${Utils.strip(
         map.name)} by ${map.author} to the jukebox`)
@@ -640,8 +643,7 @@ export class MapService {
     }
     this._queue.splice(index, 1)
     this.fillQueue()
-    await this.writeMatchSettings()
-    void this.updateNextMap()
+    await this.handleNextMap()
     Events.emit('JukeboxChanged', this.jukebox.map(a => a.map))
     return true
   }
@@ -663,8 +665,7 @@ export class MapService {
     }
     this.fillQueue()
     Events.emit('JukeboxChanged', this.jukebox.map(a => a.map))
-    this.writeMatchSettings()
-    await this.updateNextMap()
+    await this.handleNextMap()
     if (caller !== undefined) {
       Logger.trace(`${Utils.strip(caller.nickname)} (${caller.login}) cleared the jukebox`)
     } else {
@@ -686,11 +687,8 @@ export class MapService {
     })).sort((a, b): number => a.rand - b.rand).map(a => a.map)
     this._queue.length = 0
     this.fillQueue()
-    if (config.manualMapLoading.enabled) {
-      await ManualMapLoading.writeMS(this._current, this._queue.map(a => a.map))
-    }
+    await this.handleNextMap()
     Events.emit('JukeboxChanged', this.jukebox.map(a => a.map))
-    await this.updateNextMap()
     if (caller !== undefined) {
       Logger.info(`${Utils.strip(caller.nickname)} (${caller.login}) shuffled the maplist`)
     } else {
