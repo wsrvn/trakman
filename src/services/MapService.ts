@@ -509,13 +509,18 @@ export class MapService {
 
   /**
    * Puts current map into history array, changes current map and updates the queue
+   * @param uid the UID of the map that the server just loaded
    */
   static async update(uid: string): Promise<void> {
     if (config.manualMapLoading.enabled) {
+      // the map that the server loaded is different from the one that it's supposed to
+      // can't be bothered arguing with the server (the map file is probably corrupt)
+      // so just skip it
       if (uid !== this._queue[0].map.id) {
-        Logger.error("The server couldn't load the next map in queue. Skipping and retrying...",
+        Logger.error("The server couldn't load the next map in queue. Skipping...",
           `Offending map was: ${JSON.stringify(this._queue[0].map)}`)
         await this.removeFromQueue(this._queue[0].map.id, undefined, false)
+        // best way I thought of to skip a map... :(
         const skip = () => {
           Events.removeListener(skip)
           Client.callNoRes('NextChallenge', GameService.gameMode === 'Cup' ? [{ boolean: true }] : undefined)
@@ -533,10 +538,6 @@ export class MapService {
       this.fillQueue()
     }
     Events.emit('JukeboxChanged', this.jukebox.map(a => a.map))
-    // necessary??
-    if (!config.manualMapLoading.enabled) {
-      await this.updateNextMap()
-    }
   }
 
   static restartMap() {
