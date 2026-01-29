@@ -510,9 +510,20 @@ export class MapService {
   /**
    * Puts current map into history array, changes current map and updates the queue
    */
-  static async update(): Promise<void> {
+  static async update(uid: string): Promise<void> {
     if (config.manualMapLoading.enabled) {
-      await ManualMapLoading.nextMap(this._current, this._queue.map(a => a.map))
+      if (uid !== this._queue[0].map.id) {
+        Logger.error("The server couldn't load the next map in queue. Skipping and retrying...",
+          `Offending map was: ${JSON.stringify(this._queue[0].map)}`)
+        await this.removeFromQueue(this._queue[0].map.id, undefined, false)
+        const skip = () => {
+          Events.removeListener(skip)
+          Client.callNoRes('NextChallenge', GameService.gameMode === 'Cup' ? [{ boolean: true }] : undefined)
+        }
+        Events.addListener('ServerStateChanged', skip)
+        return
+      }
+      await ManualMapLoading.nextMap(this._queue.map(a => a.map))
     }
     this._history.unshift(this._current)
     this._history.length = Math.min(this.historySize, this._history.length)

@@ -13,7 +13,7 @@ export class ManualMapLoading {
   private static mapIndex = 0
   private static isReset = false
   private static oldQueue: tm.Map[]
-  private static oldCurr: tm.CurrentMap
+  private static oldCurr: tm.Map
 
   static async getFileNames(): Promise<string[]> {
     const files: string[] = await fs.readdir(this.prefix + config.manualMapLoading.mapsDirectory, { recursive: true })
@@ -155,7 +155,7 @@ export class ManualMapLoading {
    * @param queue the queue
    * @param isReset
    */
-  static async writeMS(curr: tm.CurrentMap, queue: tm.Map[], isReset = false) {
+  static async writeMS(curr: tm.Map, queue: tm.Map[], isReset = false) {
     const newQueue = (queue.slice(0, config.manualMapLoading.preloadMaps))
     // don't write unless something has changed
     if (this.oldQueue !== undefined && this.oldCurr !== undefined && curr.id === this.oldCurr.id && curr.fileName === this.oldCurr.fileName && this.oldQueue.length === newQueue.length && this.oldQueue.every(
@@ -239,12 +239,11 @@ export class ManualMapLoading {
 
   /**
    * Update current map and write a new MatchSettings if the next map hasn't been loaded yet.
-   * @param curr the current map
    * @param queue the queue
    */
-  static async nextMap(curr: tm.CurrentMap, queue: tm.Map[]) {
+  static async nextMap(queue: tm.Map[]) {
     if (++this.mapIndex >= config.manualMapLoading.preloadMaps) {
-      await this.writeMS(curr, queue)
+      await this.writeMS(queue[0], queue.slice(1))
     }
     this.isReset = false
   }

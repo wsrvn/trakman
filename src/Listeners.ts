@@ -218,7 +218,7 @@ export class Listeners {
       // Check whether the map was restarted
       if (!isRestart) {
         // In case it wasn't, update the votes and records
-        await MapService.update()
+        await MapService.update(map.UId)
         await RecordService.nextMap()
         await VoteService.nextMap()
       } else {
