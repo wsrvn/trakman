@@ -712,7 +712,7 @@ declare global {
     /** Map object received from certain dedicated server callbacks and methods */
     export interface TrackmaniaMapInfo {
       /** Map UID */
-      readonly Uid: string;
+      readonly UId: string;
       /** Map name */
       readonly Name: string;
       /** Map file location (Relative to GameData/Tracks directory) */
