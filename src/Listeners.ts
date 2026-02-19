@@ -39,10 +39,7 @@ export class Listeners {
           Logger.info(`Banned player ${playerInfo.Login} (${Utils.strip(playerInfo.NickName)}) attempted to join.`);
           return;
         }
-        console.log("=========")
-        console.log(playerInfo)
         const pi: any | Error = await Client.call("GetPlayerInfo", [{ string: login }]);
-        console.log(pi)
         const player: tm.Player = await PlayerService.join(
           playerInfo.Login,
           playerInfo.NickName,
@@ -414,7 +411,6 @@ export class Listeners {
           isServer: flags?.[flags.length - 6] === "1",
           hasPlayerSlot: flags?.[flags.length - 7] === "1",
         };
-        console.log('INFOCHANGED')
         PlayerService.setPlayerInfo(info);
         Events.emit("PlayerInfoChanged", info);
       },
