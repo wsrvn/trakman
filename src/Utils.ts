@@ -545,7 +545,7 @@ export const Utils = {
    * @returns Coppers amount after subtracting tax
    */
   getCoppersAfterTax(coppers: number): number {
-    return Math.round(coppers * 1.05) + 2 - coppers
+    return coppers - (Math.round(coppers * 0.05) + 2)
   },
 
   strVar,
