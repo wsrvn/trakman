@@ -89,7 +89,7 @@ export class MapService {
         map: a,
         rand: Math.random()
       }))
-      .sort((a, b): number => a.rand - b.rand).map(a => a.map)
+        .sort((a, b): number => a.rand - b.rand).map(a => a.map)
       return
     }
     const mapList: any[] | Error = await Client.call('GetChallengeList', [{ int: 5000 }, { int: 0 }])
@@ -139,7 +139,7 @@ export class MapService {
       map: a,
       rand: Math.random()
     }))
-    .sort((a, b): number => a.rand - b.rand).map(a => a.map)
+      .sort((a, b): number => a.rand - b.rand).map(a => a.map)
     await this.repo.splitAdd(mapsNotInDBObjects)
   }
 
@@ -651,7 +651,7 @@ export class MapService {
     } else {
       Logger.trace(`Map ${Utils.strip(
         this._queue[index].map.name)} by ${this._queue[index].map.author} has been removed from the ${jukebox ?
-        'jukebox' : 'queue'}`)
+          'jukebox' : 'queue'}`)
     }
     this._queue.splice(index, 1)
     this.fillQueue()
@@ -780,12 +780,14 @@ export class MapService {
     } else if (info.Environnement === 'Alpine') {
       info.Environnement = 'Snow'
     }
+    const validEnvs = ["Stadium", "Island", "Desert", "Rally", "Bay", "Coast", "Snow"].concat(config.customEnvironments)
+
     return {
       id: info.UId,
       name: info.Name,
       fileName: info.FileName,
       author: info.Author,
-      environment: info.Environnement,
+      environment: validEnvs.includes(info.Environnement) ? info.Environnement : 'Stadium',
       mood: info.Mood,
       bronzeTime: info.BronzeTime,
       silverTime: info.SilverTime,

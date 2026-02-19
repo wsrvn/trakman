@@ -43,7 +43,8 @@ const currentModIndex = {
   'Bay': 0,
   'Coast': 0,
   'Island': 0,
-  'Rally': 0
+  'Rally': 0,
+  ...tm.config.controller.customEnvironments.reduce((acc, env) => ({ ...acc, [env]: 0 }), {})
 }
 
 const loadMod = (): void => {
@@ -131,7 +132,7 @@ const events: tm.Listener[] = [{
 }, {
   event: 'EndMap',
   callback: async (): Promise<void> => {
-    currentModIndex[tm.maps.current.environment]++
+    currentModIndex[tm.maps.current.environment as keyof typeof currentModIndex]++
     loadMod()
   }
 }, {

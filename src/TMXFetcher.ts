@@ -184,7 +184,7 @@ export abstract class TMXFetcher {
       tmxId = arg
       const url = `https://${prefix}.tm-exchange.com/api/tracks?${new URLSearchParams([['fields',
         `TrackId,TrackName,UId,AuthorTime,AuthorScore,GoldTarget,SilverTarget,BronzeTarget,Authors,UploadedAt,` + `UpdatedAt,PrimaryType,AuthorComments,Style,Routes,Difficulty,Environment,Car,Mood,Awards,Comments,Images`],
-        ['id', tmxId.toString()]])}`
+      ['id', tmxId.toString()]])}`
       const res = await fetch(url).catch((err: Error) => err)
       if (res instanceof Error) {
         Logger.warn(`Error while fetching map info from TMX (url: ${url}).`, res.message)
@@ -207,7 +207,7 @@ export abstract class TMXFetcher {
       for (const p of this.prefixes) { // Search for right prefix
         const url = `https://${p}.tm-exchange.com/api/tracks?${new URLSearchParams([['fields',
           `TrackId,TrackName,UId,AuthorTime,AuthorScore,GoldTarget,SilverTarget,BronzeTarget,Authors,UploadedAt,` + `UpdatedAt,PrimaryType,AuthorComments,Style,Routes,Difficulty,Environment,Car,Mood,Awards,Comments,Images`],
-          ['uid', arg.toString()]])}`
+        ['uid', arg.toString()]])}`
         const res = await fetch(url).catch((err: Error) => err)
         if (res instanceof Error || !res.ok) {
           continue
@@ -233,7 +233,7 @@ export abstract class TMXFetcher {
     let parsedData
     try {
       parsedData = this.parseMapInfoApiResponse(data, replays, this.prefixToSite(prefix), prefix)
-    } catch(ex) {
+    } catch (ex) {
       Logger.debug(`Tmx map info api parse error ${ex}`, `Map data: ${data}`, `Arg: ${arg}`, `Prefix: ${prefix}`)
       return new Error()
     }
@@ -252,7 +252,7 @@ export abstract class TMXFetcher {
   static async getReplays(tmxId: number, prefix: TMXPrefix): Promise<tm.TMXReplay[] | Error> {
     const url = `https://${prefix}.tm-exchange.com/api/replays?${new URLSearchParams(
       [['fields', 'ReplayTime,ReplayId,ReplayScore,Score,TrackAt,ReplayAt,User.UserId,User.Name'],
-        ['trackId', tmxId.toString()], ['best', '1'] // only get the best replay from each player
+      ['trackId', tmxId.toString()], ['best', '1'] // only get the best replay from each player
       ])}`
     const res = await fetch(url).catch((err: Error) => err)
     let data: any
@@ -303,13 +303,13 @@ export abstract class TMXFetcher {
   static async searchForMap(query?: string, author?: string, site: tm.TMXSite = this.packmaskSite,
     count: number = config.defaultTMXSearchLimit): Promise<Error | tm.TMXSearchResult[]> {
     const params: [string, string][] = [['count', count.toString()], ['name', (query ?? '').trim()],
-      ['author', (author ?? '').trim()]]
+    ['author', (author ?? '').trim()]]
     if (author === undefined) { params.pop() }
     if (query === undefined) { params.pop() }
     const prefix = this.siteToPrefix(site)
     const url = `https://${prefix}.tm-exchange.com/api/tracks?${new URLSearchParams([['fields',
       `TrackId,TrackName,UId,AuthorTime,AuthorScore,Authors,UploadedAt,` + `UpdatedAt,PrimaryType,AuthorComments,Style,Routes,Difficulty,Environment,Car,Mood,Awards,Comments,Images,TrackValue`],
-      ...params])}`
+    ...params])}`
     const res = await fetch(url).catch((err: Error) => err)
     if (res instanceof Error) {
       Logger.warn(`Error while searching for map on TMX (url: ${url}).`, res.message)
@@ -384,7 +384,7 @@ export abstract class TMXFetcher {
         uploadDate: new Date(e.UploadedAt),
         lastUpdateDate: new Date(e.UpdatedAt),
         type: this.mapTypes[e.PrimaryType as keyof typeof this.mapTypes],
-        environment: this.environments[e.Environment as keyof typeof this.environments],
+        environment: this.environments[e.Environment as keyof typeof this.environments] ?? "Stadium",
         mood: this.moods[e.Mood as keyof typeof this.moods],
         style: this.styles[e.Style as keyof typeof this.styles],
         routes: this.routes[e.Routes as keyof typeof this.routes],
@@ -418,7 +418,7 @@ export abstract class TMXFetcher {
       uploadDate: new Date(data.UploadedAt),
       lastUpdateDate: new Date(data.UpdatedAt),
       type: this.mapTypes[data.PrimaryType as keyof typeof this.mapTypes],
-      environment: this.environments[data.Environment as keyof typeof this.environments],
+      environment: this.environments[data.Environment as keyof typeof this.environments] ?? "Stadium",
       mood: this.moods[data.Mood as keyof typeof this.moods],
       style: this.styles[data.Style as keyof typeof this.styles],
       routes: this.routes[data.Routes as keyof typeof this.routes],

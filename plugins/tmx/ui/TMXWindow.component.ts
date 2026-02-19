@@ -70,19 +70,19 @@ class TMXWindow extends PopupWindow<number> {
       maps = [tm.jukebox.history?.[index + 2], tm.jukebox.history?.[index + 1], tm.jukebox.history?.[index]]
       TMXMaps = [tmx.history?.[index + 2], tmx.history?.[index + 1], tmx.history?.[index]]
       titles = [`${config.titles.previous} #${index + 3} `, `${config.titles.previous} #${index + 2} `,
-        `${config.titles.previous} #${index + 1} `]
+      `${config.titles.previous} #${index + 1} `]
     } else {
       const index = Math.ceil((page - (currentPage + 1)) * config.itemsPerPage) + 1
       maps = [tm.jukebox.queue?.[index], tm.jukebox.queue?.[index + 1], tm.jukebox.queue?.[index + 2]]
       TMXMaps = [tmx.queue?.[index], tmx.queue?.[index + 1], tmx.queue?.[index + 2]]
       titles = [`${config.titles.next} #${index + 1} `, `${config.titles.next} #${index + 2} `,
-        `${config.titles.next} #${index + 3} `]
+      `${config.titles.next} #${index + 3} `]
     }
     const m = maps.filter(a => a !== undefined).map(a => (a as any).id)
     const allRecords: Readonly<tm.Record[]> = [...tm.records.getFromHistory(...m), ...tm.records.local,
-      ...tm.records.getFromQueue(...m)]
-    .sort((a, b) => a.time - b.time)
-    .filter((a, i, arr) => arr.findIndex(b => b.login === a.login && a.map === b.map) === i)
+    ...tm.records.getFromQueue(...m)]
+      .sort((a, b) => a.time - b.time)
+      .filter((a, i, arr) => arr.findIndex(b => b.login === a.login && a.map === b.map) === i)
     const cell: GridCellFunction = (i, j, w, h) => {
       const map = maps[j]
       if (map === undefined) { return '' }
@@ -129,7 +129,7 @@ image="${image}" url="${url}" /> `
         config.iconWidth)}
 <frame posn="${width - (config.iconWidth + config.margin * 2)} 0 4" >
   ${icon(0, 0, config.icons.dedimania,
-        tm.utils.safeString(`dedimania.net/tmstats/?do=stat&Uid=${map.id}&Show=RECORDS`))}
+          tm.utils.safeString(`dedimania.net/tmstats/?do=stat&Uid=${map.id}&Show=RECORDS`))}
 </frame>`
     }
     return `${this.constructEntry(title, config.icons.header, width - (config.iconWidth + config.margin) * 3, height,
@@ -138,7 +138,7 @@ image="${image}" url="${url}" /> `
       ${icon(0, 0, config.icons.maniaExchange, tm.utils.fixProtocol(TMXMap.pageUrl))}
       ${icon(config.iconWidth + config.margin, 0, config.icons.downloadGreen, tm.utils.fixProtocol(TMXMap.downloadUrl))}
       ${icon((config.iconWidth + config.margin) * 2, 0, config.icons.dedimania,
-      tm.utils.safeString(`dedimania.net/tmstats/?do=stat&Uid=${map.id}&Show=RECORDS`))}
+        tm.utils.safeString(`dedimania.net/tmstats/?do=stat&Uid=${map.id}&Show=RECORDS`))}
     </frame>`
   }
 
@@ -149,10 +149,10 @@ image="${image}" url="${url}" /> `
       <frame posn="${iconWidth + config.margin * 2} ${-config.margin} 4">
         <quad posn="0 0 3" sizen="${width - (iconWidth + config.margin * 3)} ${height - config.margin * 2}" bgcolor="${config.gridBackground}"/>
         ${useCenteredText === true ?
-      centeredText(text, width - (iconWidth + config.margin * 3), height - config.margin * 2,
-        { textScale: config.textscale }) :
-      leftAlignedText(text, width - (iconWidth + config.margin * 3), height - config.margin * 2,
-        { textScale: config.textscale })}
+        centeredText(text, width - (iconWidth + config.margin * 3), height - config.margin * 2,
+          { textScale: config.textscale }) :
+        leftAlignedText(text, width - (iconWidth + config.margin * 3), height - config.margin * 2,
+          { textScale: config.textscale })}
       </frame>`
   }
 
@@ -191,11 +191,11 @@ image="${image}" url="${url}" /> `
     const timeCell: GridCellFunction = (i, j, w, h) => centeredText(
       records[i - 1] !== undefined ? tm.utils.getTimeString(records[i - 1]?.time) : config.defaultTime, w, h, options)
     const arr: (GridCellFunction | GridCellObject)[] = [(i, j, w, h) => centeredText('Lp.', w, h, options),
-      (i, j, w, h) => centeredText('Time', w, h, options), (i, j, w, h) => centeredText('Name', w, h, options)]
+    (i, j, w, h) => centeredText('Time', w, h, options), (i, j, w, h) => centeredText('Name', w, h, options)]
     for (let i = 0; i < count; i++) {
       arr.push(indexCell, timeCell, nameCell)
     }
-    const image = TMXMap === undefined ? config.noScreenshot[environment] :
+    const image = TMXMap === undefined ? (config.noScreenshot[environment as keyof typeof config.noScreenshot] ?? config.noScreenshot.Stadium) :
       tm.utils.safeString(TMXMap.thumbnailUrl + `&.jpeg`)
     return `<quad posn="${config.margin} ${-config.margin} 8" sizen="${config.screenshotWidth} ${height - config.margin * 2}" image="${image}"/>
       ${centeredText(config.notLoaded, config.screenshotWidth, height, {
@@ -216,7 +216,7 @@ image="${image}" url="${url}" /> `
       height, config.iconWidth)}
     <frame posn="${width - (config.authorTimeWidth + config.margin)} 0 4">
       ${this.constructEntry(tm.utils.getTimeString(map.authorTime), config.icons.authorTime,
-      config.authorTimeWidth + config.margin, height, config.iconWidth, true)}
+        config.authorTimeWidth + config.margin, height, config.iconWidth, true)}
     </frame>`
   }
 
@@ -236,19 +236,19 @@ image="${image}" url="${url}" /> `
     let awardsIcon = ic.awards.normal
     if (lbRating === 'Nadeo') { awardsIcon = ic.awards.nadeo } else if (lbRating === 'Classic') { awardsIcon = ic.awards.classic }
     const infos: [string, string][] = [[map.mood, ic.mood[map.mood.toLowerCase() as keyof typeof ic.mood]],
-      [tm.utils.formatDate(map.addDate, true), ic.addDate],
-      [map.voteRatio === -1 ? config.defaultText : map.voteRatio.toFixed(0), ic.voteRatio],
-      [map.copperPrice.toString(), ic.copperPrice], [map.environment, ic.environment],
-      [map?.checkpointsPerLap !== undefined ? `${map.checkpointsPerLap - 1} CPs` : config.defaultText,
-        ic.checkpointsAmount], [map.voteCount.toString(), ic.voteCount],
-      [(TMXMap?.awards?.toString() ?? map?.awards?.toString()) ?? config.defaultText, awardsIcon],
-      [TMXMap?.author === undefined ? config.defaultText :
-        (tm.utils.isMultibyte(TMXMap.author) ? '' : tm.utils.safeString(TMXMap.author)), ic.tmxAuthor],
-      [TMXMap !== undefined ? tm.utils.formatDate(TMXMap.lastUpdateDate, true) : config.defaultText, ic.buildDate],
-      [TMXMap?.style ?? config.defaultText, ic.style], [lbRating, lbIcon], [TMXMap?.difficulty ?? config.defaultText,
-        ic.difficulty[(TMXMap?.difficulty?.toLowerCase() as keyof typeof ic.difficulty) ?? 'beginner']],
-      [TMXMap?.routes ?? config.defaultText, ic.routes], [TMXMap?.type ?? config.defaultText, ic.type],
-      [TMXMap?.game ?? config.defaultText, ic.game]]
+    [tm.utils.formatDate(map.addDate, true), ic.addDate],
+    [map.voteRatio === -1 ? config.defaultText : map.voteRatio.toFixed(0), ic.voteRatio],
+    [map.copperPrice.toString(), ic.copperPrice], [map.environment, ic.environment],
+    [map?.checkpointsPerLap !== undefined ? `${map.checkpointsPerLap - 1} CPs` : config.defaultText,
+    ic.checkpointsAmount], [map.voteCount.toString(), ic.voteCount],
+    [(TMXMap?.awards?.toString() ?? map?.awards?.toString()) ?? config.defaultText, awardsIcon],
+    [TMXMap?.author === undefined ? config.defaultText :
+      (tm.utils.isMultibyte(TMXMap.author) ? '' : tm.utils.safeString(TMXMap.author)), ic.tmxAuthor],
+    [TMXMap !== undefined ? tm.utils.formatDate(TMXMap.lastUpdateDate, true) : config.defaultText, ic.buildDate],
+    [TMXMap?.style ?? config.defaultText, ic.style], [lbRating, lbIcon], [TMXMap?.difficulty ?? config.defaultText,
+    ic.difficulty[(TMXMap?.difficulty?.toLowerCase() as keyof typeof ic.difficulty) ?? 'beginner']],
+    [TMXMap?.routes ?? config.defaultText, ic.routes], [TMXMap?.type ?? config.defaultText, ic.type],
+    [TMXMap?.game ?? config.defaultText, ic.game]]
     const cell: GridCellFunction = (i, j, w, h) => {
       const index = (i * grid.columns) + j
       return `
@@ -272,8 +272,8 @@ image="${image}" url="${url}" /> `
     })
     const options = { textScale: config.recordTextScale }
     const arr: (GridCellFunction | GridCellObject)[] = [(i, j, w, h) => centeredText('Lp.', w, h, options),
-      (i, j, w, h) => centeredText('Time', w, h, options), (i, j, w, h) => centeredText('Name', w, h, options),
-      (i, j, w, h) => centeredText('Date', w, h, options), (i, j, w, h) => centeredText('Dl.', w, h, options)]
+    (i, j, w, h) => centeredText('Time', w, h, options), (i, j, w, h) => centeredText('Name', w, h, options),
+    (i, j, w, h) => centeredText('Date', w, h, options), (i, j, w, h) => centeredText('Dl.', w, h, options)]
     const indexCell: GridCellObject = {
       callback: (i, j, w, h) => centeredText(i.toString(), w, h, options),
       background: config.iconBackground
