@@ -152,7 +152,7 @@ export class PlayerRepository extends Repository {
       if (logins.length === 0) { return ret }
     }
     const query = `SELECT id, login FROM players WHERE ${logins.map((a, i) => `login=$${i + 1} OR `).join('')
-    .slice(0, -3)}`
+      .slice(0, -3)}`
     const res = await this.query(query, ...logins)
     this.cachedIds.push(...res)
     this.cachedIds.length = Math.min(this.cachedIds.length, 300)
@@ -164,11 +164,6 @@ export class PlayerRepository extends Repository {
       countryCode,
       country
     } = Utils.getRegionInfo(entry.region)
-    if (countryCode === undefined) {
-      void Logger.fatal(
-        `Country code for player ${entry.login} is undefined, received region: ${entry.region}. Check your database`)
-      return null as any
-    }
     return {
       login: entry.login,
       nickname: entry.nickname,

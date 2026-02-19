@@ -184,7 +184,7 @@ export const Utils = {
   getRegionInfo(region: string): {
     region: string,
     country: string,
-    countryCode?: string
+    countryCode: string
   } {
     let split = region.split('|')
     if (region.startsWith('World')) {
@@ -192,7 +192,7 @@ export const Utils = {
     }
     const r: string = split.join('|')
     const country: string = split[0]
-    const countryCode: string | undefined = this.countryToCode(country)
+    const countryCode: string = this.countryToCode(country) ?? "OTH"
     return {
       region: r,
       country,
