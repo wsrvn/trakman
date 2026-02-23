@@ -192,7 +192,7 @@ export const Utils = {
     }
     const r: string = split.join('|')
     const country: string = split[0]
-    const countryCode: string = this.countryToCode(country) ?? "OTH"
+    const countryCode: string = this.countryToCode(country)
     return {
       region: r,
       country,
@@ -225,8 +225,8 @@ export const Utils = {
    * @param country Country name (eg. Poland)
    * @returns Country code (eg. POL)
    */
-  countryToCode(country: string): string | undefined {
-    return countries.find(a => a.name === country)?.code
+  countryToCode(country: string): string {
+    return countries.find(a => a.name === country)?.code ?? "OTH"
   },
 
   /**
