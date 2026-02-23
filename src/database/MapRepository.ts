@@ -42,7 +42,8 @@ const environments = {
   Rally: 4,
   Bay: 5,
   Coast: 6,
-  Snow: 7
+  Snow: 7,
+  ...config.customEnvironments.map((name, i) => ({ [name]: i + 8 })).reduce((a, b) => ({ ...a, ...b }), {})
 }
 
 const mapIdsRepo = new MapIdsRepository()
@@ -74,11 +75,12 @@ export class MapRepository extends Repository {
     uids.forEach((map, i) => {
       if (map !== undefined) {
         values.push(
-          ([i, map.name.replaceAll('\n', ' '), map.fileName, map.author, environments[map.environment], moods[map.mood],
+          ([i, map.name.replaceAll('\n', ' '), map.fileName, map.author, environments[map.environment as keyof typeof environments] ?? environments["Stadium"],
+            moods[map.mood],
             map.bronzeTime, map.silverTime, map.goldTime, map.authorTime, map.copperPrice, map.isLapRace,
             map.defaultLapsAmount, map.checkpointsPerLap, map.addDate.toISOString(), map.leaderboardRating,
             map.awards]).map(a => a === undefined ? '\\N' : a.toString()
-          .replaceAll('\t', ' ').replaceAll('\\', '')).join('\t')) // ugly replace to prevent DB errors
+              .replaceAll('\t', ' ').replaceAll('\\', '')).join('\t')) // ugly replace to prevent DB errors
       }
     })
     const bulk = values.join('\n')
@@ -102,7 +104,7 @@ export class MapRepository extends Repository {
     const arr = maps.filter(a => ids.some(b => b.uid === a.id))
     if (arr.length !== maps.length) {
       Logger.error(`Failed to get ids for maps ${maps
-      .filter(a => !ids.some(b => b.uid === a.id)).join(', ')} while inserting into maps table`)
+        .filter(a => !ids.some(b => b.uid === a.id)).join(', ')} while inserting into maps table`)
     }
     if (arr.length === 0) { return }
     const query = `INSERT INTO maps(id, name, filename, author, environment, mood, 
@@ -111,7 +113,7 @@ export class MapRepository extends Repository {
       ids.length)} ON CONFLICT DO NOTHING`
     const values: any[] = []
     for (const [i, map] of arr.entries()) {
-      values.push(ids[i].id, map.name, map.fileName, map.author, environments[map.environment], moods[map.mood],
+      values.push(ids[i].id, map.name, map.fileName, map.author, environments[map.environment as keyof typeof environments] ?? environments["Stadium"], moods[map.mood],
         map.bronzeTime, map.silverTime, map.goldTime, map.authorTime, map.copperPrice, map.isLapRace,
         map.defaultLapsAmount, map.checkpointsPerLap, map.addDate, map.leaderboardRating, map.awards)
     }
@@ -358,7 +360,7 @@ export class MapRepository extends Repository {
       name: entry.name,
       fileName: entry.filename,
       author: entry.author,
-      environment: Object.entries(environments).find(a => a[1] === entry.environment)?.[0] as any,
+      environment: Object.entries(environments).find(a => a[1] === entry.environment)?.[0] as tm.Environment ?? 'Stadium',
       mood: Object.entries(moods).find(a => a[1] === entry.mood)?.[0] as any,
       bronzeTime: entry.bronze_time,
       silverTime: entry.silver_time,

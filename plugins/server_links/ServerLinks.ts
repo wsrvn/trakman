@@ -91,7 +91,7 @@ async function refreshOtherServersData() {
     let newInfo: Partial<ServerInfo>
     try {
       newInfo = JSON.parse(file)
-    } catch(err) {
+    } catch (err) {
       continue
     }
     const infoObj = constructInfoObject(newInfo, e.name)

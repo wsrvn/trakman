@@ -1,4 +1,4 @@
-export {}
+export { }
 declare global {
   /** Global Trakman object providing methods to interact with controller */
   namespace tm {
@@ -981,7 +981,7 @@ declare global {
     /** Server game mode ('TimeAttack', 'Rounds', 'Cup', 'Laps', 'Teams', 'Stunts') */
     export type GameMode = 'TimeAttack' | 'Rounds' | 'Cup' | 'Laps' | 'Teams' | 'Stunts'
     /** Map environment ('Stadium', 'Island', etc.) */
-    export type Environment = 'Stadium' | 'Island' | 'Desert' | 'Rally' | 'Bay' | 'Coast' | 'Snow'
+    export type Environment = string
     /** Map mood ('Sunrise', 'Night', etc.) */
     export type Mood = 'Sunrise' | 'Day' | 'Sunset' | 'Night'
     /** Server command data type */

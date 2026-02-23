@@ -99,5 +99,7 @@ export default {
   /** When using `matchString()` util with `stripTrackmaniaFormatting = true`, values are cached to optimize performance */
   matchStringCacheSize: 10000,
   /** If haystack size exceeds this threshold `matchString()` will skip expensive haystack processing to optimize performance */
-  matchStringReduxModeThreshold: 5000
+  matchStringReduxModeThreshold: 5000,
+  /** Custom map environments. If a map has an environment that is not in this list, it will be marked as "Stadium" */
+  customEnvironments: ["Highlands", "NewSnowCar"]
 }

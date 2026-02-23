@@ -213,9 +213,9 @@ export const Utils = {
       Rally: 'Rally',
       Bay: 'Bay',
       Coast: 'Coast',
-      Snow: 'Alpine'
+      Snow: 'Alpine',
     }
-    return environmentMap[environment]
+    return environmentMap[environment] ?? environment
   },
 
   matchString,
