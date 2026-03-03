@@ -6,6 +6,7 @@ import { Utils } from '../Utils.js'
 import config from '../../config/Config.js'
 import { GameService } from './GameService.js'
 import { ManualMapLoading } from './ManualMapLoading.js'
+import { promises as fs } from 'node:fs'
 
 interface JukeboxMap {
   readonly map: tm.Map
@@ -476,6 +477,7 @@ export class MapService {
     login: string,
     nickname: string
   }): Promise<boolean | Error> {
+    const skipId = config.manualMapLoading.skipId
     const map: tm.Map | undefined = this._maps.find(a => id === a.id)
     await Client.call('GetChallengeList', [{ int: 5000 }, { int: 0 }]) // I HAVE NO CLUE HOW IT WORKS WITH THIS
     if (map === undefined) {
@@ -504,6 +506,36 @@ export class MapService {
     })
     await this.removeFromQueue(id, caller, false)
     //await this.writeMatchSettings()
+    if (config.manualMapLoading.deleteMap && config.manualMapLoading.enabled) {
+      if (skipId !== undefined && map.id === skipId) {
+        Logger.info(`Not deleting ${map.fileName} because it is defined inside the config`)
+        if (caller !== undefined) {
+          tm.sendMessage(`${Utils.strip(map.fileName)} is configured to not be deleted from the filesystem.`,
+            caller.login)
+        }
+      } else {
+        const file = config.manualMapLoading.mapsDirectoryPrefix + map.fileName
+        Logger.info(`Deleting track file ${file}`)
+        try {
+          await fs.unlink(file)
+          if (caller !== undefined) {
+            tm.sendMessage(`${Utils.strip(map.fileName)} was deleted from disk.`, caller.login)
+          }
+        } catch (err: any) {
+          if (err?.code === 'ENOENT') {
+            Logger.warn(`File ${file} already missing, skipping unlink`)
+            if (caller !== undefined) {
+              tm.sendMessage(`${Utils.strip(map.fileName)} was already missing on disk.`, caller.login)
+            }
+          } else {
+            Logger.error(`Failed to unlink ${file}: ${err?.message}`)
+            if (caller !== undefined) {
+              tm.sendMessage(`Error deleting ${Utils.strip(map.fileName)}: ${err?.message}`, caller.login)
+            }
+          }
+        }
+      }
+    }
     return true
   }
 
