@@ -64,10 +64,6 @@ export class ManualMapLoading {
           voteRatio: 0,
           voteCount: 0
         }
-        if (config.manualMapLoading.skipId !== undefined && mapObject.id === config.manualMapLoading.skipId) {
-          Logger.info(`Not parsing ${map.FileName} because it is defined inside the config`)
-          continue
-        }
         parsed.add(mapObject.id)
         addedMaps.add(mapObject)
       } else {
