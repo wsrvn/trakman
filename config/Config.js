@@ -59,6 +59,10 @@ export default {
     mapsDirectory: '',
     /** Ignore non-stadium maps */
     stadiumOnly: undefined,
+    /** Delete map files from disk when maps are removed */
+    deleteMap: false,
+    /** Optional map uid that should be skipped by manual map parsing and file deletion */
+    skipId: undefined,
     /** Amount of maps to load into the server. Default value: 5 */
     preloadMaps: 5
   },
