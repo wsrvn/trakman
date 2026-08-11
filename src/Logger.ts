@@ -15,7 +15,7 @@ export abstract class Logger {
     blue: '\u001b[34m',
     magenta: '\u001b[35m',
     cyan: '\u001b[36m',
-    white: '\u001b[37m',
+    white: '\u001b[37m'
   } as const
   private static readonly discordColours = {
     black: 0x000000,
@@ -31,28 +31,40 @@ export abstract class Logger {
   private static readonly logDir: string = './logs'
   private static readonly logTypes = {
     fatal: {
-      level: 1, colour: this.consoleColours.red,
-      files: [`${this.logDir}/fatal.log`, `${this.logDir}/error.log`, `${this.logDir}/combined.log`], discordColour: this.discordColours.red
+      level: 1,
+      colour: this.consoleColours.red,
+      files: [`${this.logDir}/fatal.log`, `${this.logDir}/error.log`, `${this.logDir}/combined.log`],
+      discordColour: this.discordColours.red
     },
     error: {
-      level: 1, colour: this.consoleColours.red,
-      files: [`${this.logDir}/error.log`, `${this.logDir}/combined.log`], discordColour: this.discordColours.red
+      level: 1,
+      colour: this.consoleColours.red,
+      files: [`${this.logDir}/error.log`, `${this.logDir}/combined.log`],
+      discordColour: this.discordColours.red
     },
     warn: {
-      level: 2, colour: this.consoleColours.yellow,
-      files: [`${this.logDir}/warn.log`, `${this.logDir}/combined.log`], discordColour: this.discordColours.yellow
+      level: 2,
+      colour: this.consoleColours.yellow,
+      files: [`${this.logDir}/warn.log`, `${this.logDir}/combined.log`],
+      discordColour: this.discordColours.yellow
     },
     info: {
-      level: 3, colour: this.consoleColours.green,
-      files: [`${this.logDir}/info.log`, `${this.logDir}/combined.log`], discordColour: this.discordColours.green
-    },
-    debug: {
-      level: 4, colour: this.consoleColours.cyan,
-      files: [`${this.logDir}/debug.log`, `${this.logDir}/combined.log`], discordColour: this.discordColours.cyan
+      level: 3,
+      colour: this.consoleColours.green,
+      files: [`${this.logDir}/info.log`, `${this.logDir}/combined.log`],
+      discordColour: this.discordColours.green
     },
     trace: {
-      level: 5, colour: this.consoleColours.magenta,
-      files: [`${this.logDir}/trace.log`, `${this.logDir}/combined.log`], discordColour: this.discordColours.magenta
+      level: 4,
+      colour: this.consoleColours.magenta,
+      files: [`${this.logDir}/trace.log`, `${this.logDir}/combined.log`],
+      discordColour: this.discordColours.magenta
+    },
+    debug: {
+      level: 5,
+      colour: this.consoleColours.cyan,
+      files: [`${this.logDir}/debug.log`, `${this.logDir}/combined.log`],
+      discordColour: this.discordColours.cyan
     }
   }
   private static readonly users: string[] = process.env.DISCORD_TAGGED_USERS?.split(',') ?? []
@@ -64,15 +76,18 @@ export abstract class Logger {
   private static readonly useDiscord: boolean = process.env.DISCORD_LOG_ENABLED === 'YES'
   private static discordLogLevel: number = 2
   private static isFirstLog: boolean = true
+  private static consoleQueue: string[] = []
+  private static consoleDisabled: boolean = process.env.CONSOLE_LOG_DISABLED === 'YES'
+  private static consoleOn: boolean = !this.consoleDisabled
 
   static async initialize(): Promise<void> {
     const envLogLevel = Number(process.env.LOG_LEVEL)
     if (isNaN(envLogLevel)) {
-      this.warn(`LOG_LEVEL is undefined or not a number, default value (${this.logLevel})` +
-        ` will be used. Check your .env file to change it`)
+      this.warn(
+        `LOG_LEVEL is undefined or not a number, default value (${this.logLevel})` + ` will be used. Check your .env file to change it`)
     } else if (envLogLevel < 0 || envLogLevel > 5) {
-      this.warn(`LOG_LEVEL needs to be >=0 and <=5, received ${envLogLevel}.` +
-        ` Default value (${this.logLevel}) will be used. Check your .env file to change it`)
+      this.warn(
+        `LOG_LEVEL needs to be >=0 and <=5, received ${envLogLevel}.` + ` Default value (${this.logLevel}) will be used. Check your .env file to change it`)
     } else {
       this.logLevel = envLogLevel
     }
@@ -82,20 +97,22 @@ export abstract class Logger {
       }
     })
     process.on('uncaughtException', (err: Error): void => {
-      void this.fatal('Uncaught exception occured: ', err.message, ...(err.stack === undefined ? '' : err.stack.split('\n'))) // indent fix
+      void this.fatal('Uncaught exception occurred: ', err.message,
+        ...(err.stack === undefined ? '' : err.stack.split('\n'))) // indent fix
     })
     process.on('unhandledRejection', (err: Error): void => {
-      void this.fatal('Unhandled rejection occured: ', err.message, ...(err.stack === undefined ? '' : err.stack.split('\n')))
+      void this.fatal('Unhandled rejection occurred: ', err.message,
+        ...(err.stack === undefined ? '' : err.stack.split('\n')))
     })
     if (this.useDiscord) {
       const envDcLog = Number(process.env.DISCORD_LOG_LEVEL)
       const envDcWebhook = process.env.DISCORD_WEBHOOK_URL
       if (isNaN(envDcLog)) {
-        this.warn(`DISCORD_LOG_LEVEL is undefined or not a number, ` +
-          `default value (${this.discordLogLevel}) will be used. Check your .env file to change it`)
+        this.warn(
+          `DISCORD_LOG_LEVEL is undefined or not a number, ` + `default value (${this.discordLogLevel}) will be used. Check your .env file to change it`)
       } else if (envDcLog < 0 || envDcLog > 5) {
-        this.warn(`DISCORD_LOG_LEVEL needs to be >=0 and <=5, received ${envDcLog}. ` +
-          `Default value (${this.discordLogLevel}) will be used. Check your .env file to change it`)
+        this.warn(
+          `DISCORD_LOG_LEVEL needs to be >=0 and <=5, received ${envDcLog}. ` + `Default value (${this.discordLogLevel}) will be used. Check your .env file to change it`)
       } else {
         this.discordLogLevel = envDcLog
       }
@@ -107,85 +124,106 @@ export abstract class Logger {
   }
 
   /**
-   * Outputs an fatal error message into the console and exits the process
+   * Adds a fatal error message into the log and exits the process
    * @param lines Message lines
    */
   static async fatal(...lines: any[]): Promise<void> {
     if (this.crashed) { return }
     this.crashed = true
-    const date: string = new Date().toUTCString()
-    const location: string = this.getLocation()
-    const tag: Tag = 'fatal'
     // In case discord message hangs the process it exits after 10 seconds anyway
     setTimeout(() => process.exit(1), 10000)
-    await this.writeLog(tag, location, date, lines)
+    void this.writeLog('fatal', this.getLocation(), this.getDateString(), lines, true)
     process.exit(1)
   }
 
   /**
-   * Outputs an error message into the console
+   * Adds an error message into the log
    * @param lines Message lines
    */
   static error(...lines: any[]): void {
     if (this.crashed) { return }
-    const date: string = new Date().toUTCString()
-    const location: string = this.getLocation()
-    const tag: Tag = 'error'
-    void this.writeLog(tag, location, date, lines)
+    void this.writeLog('error', this.getLocation(), this.getDateString(), lines)
   }
 
   /**
-   * Outputs a warn message into the console
+   * Adds a warn message into the log
    * @param lines Message lines
    */
   static warn(...lines: any[]): void {
     if (this.crashed) { return }
-    const date: string = new Date().toUTCString()
-    const location: string = this.getLocation()
-    const tag: Tag = 'warn'
-    void this.writeLog(tag, location, date, lines)
+    void this.writeLog('warn', this.getLocation(), this.getDateString(), lines)
   }
 
   /**
-   * Outputs an info message into the console
+   * Adds an info message into the log
    * @param lines Message lines
    */
   static info(...lines: any[]): void {
     if (this.crashed) { return }
-    const date: string = new Date().toUTCString()
-    const location: string = this.getLocation()
-    const tag: Tag = 'info'
-    void this.writeLog(tag, location, date, lines)
+    void this.writeLog('info', this.getLocation(), this.getDateString(), lines)
   }
 
   /**
-   * Outputs a debug message into the console
+   * Adds a debug message into the log
    * @param lines Message lines
    */
   static debug(...lines: any[]): void {
     if (this.crashed) { return }
-    const date: string = new Date().toUTCString()
-    const location: string = this.getLocation()
-    const tag: Tag = 'debug'
-    void this.writeLog(tag, location, date, lines)
+    void this.writeLog('debug', this.getLocation(), this.getDateString(), lines)
   }
 
   /**
-   * Outputs a trace message into the console
+   * Adds a trace message into the log
    * @param lines Message lines
    */
   static trace(...lines: any[]): void {
     if (this.crashed) { return }
-    const date: string = new Date().toUTCString()
-    const location: string = this.getLocation()
-    const tag: Tag = 'trace'
-    void this.writeLog(tag, location, date, lines)
+    void this.writeLog('trace', this.getLocation(), this.getDateString(), lines)
   }
 
-  private static async writeLog(tag: Tag, location: string, date: string, lines: any[]): Promise<void> {
+  /**
+   * Try to print a message to the console
+   * @param message
+   * @param force
+   */
+  static consoleLog(message: string, force: boolean) {
+    if (message !== '') {
+      this.consoleQueue.push(message)
+    }
+    if (this.consoleQueue.length > 1000) {
+      this.warn("Command input mode has been on for too long, re-enabling console logging")
+    }
+    if (force || this.consoleOn || this.consoleQueue.length > 1000) {
+      this.consoleOn = true
+      for (const m of this.consoleQueue) {
+        console.log(m)
+      }
+      this.consoleQueue = []
+    }
+  }
+
+  static disableConsole() {
+    this.consoleOn = false
+  }
+
+  static enableConsole() {
+    if (!this.consoleDisabled) {
+      this.consoleLog('', true)
+    }
+  }
+
+  private static getDateString(): string {
+    const d = new Date()
+    const ret = d.toUTCString()
+    return ret.substring(5, ret.length - 4) + `.${String(d.getMilliseconds()).padStart(3, "0")}`
+  }
+
+  private static async writeLog(tag: Tag, location: string, date: string, lines: any[], force = false): Promise<void> {
     if (lines.length === 0 || this.logTypes[tag].level > this.logLevel) { return }
+    if (!this.consoleDisabled) {
+      this.consoleLog(this.getConsoleString(tag, lines, location, date), force)
+    }
     const logStr: string = this.getLogfileString(tag, lines, location, date)
-    console.log(this.getConsoleString(tag, lines, location, date))
     for (const file of this.logTypes[tag].files) {
       await fs.appendFile(file, logStr)
     }
@@ -210,14 +248,12 @@ export abstract class Logger {
             url: this.thumbs.length === 0 ? undefined : this.thumbs[~~(Math.random() * this.thumbs.length)]
           },
           footer: {
-            text: `📅`,
+            text: `📅`
           },
-          fields: [
-            {
-              name: `➡️ ${location}`,
-              value: `⚠️ ${str}`,
-            },
-          ],
+          fields: [{
+            name: `➡️ ${location}`,
+            value: `⚠️ ${str}`
+          }]
         }]
       })
       await this.sendDiscordMessage(message)
@@ -241,7 +277,7 @@ export abstract class Logger {
   }
 
   private static getLogfileString(tag: Tag, lines: string[], location: string, date: string): string {
-    let ret: string = `<${tag.toUpperCase()}> [${date.substring(5, date.length - 4)}] (${location}) ${lines[0]}\n`
+    let ret: string = `<${tag.toUpperCase()}> [${date}] (${location}) ${lines[0]}\n`
     for (let i: number = 1; i < lines.length; i++) {
       ret += `\t${lines[i]}\n`
     }
@@ -251,7 +287,7 @@ export abstract class Logger {
   private static getConsoleString(tag: Tag, lines: string[], location: string, date: string): string {
     const colour: string = this.logTypes[tag].colour
     const colourString: string = `\u001b${colour}`
-    let ret: string = `<${colourString}${tag.toUpperCase()}\x1b[0m> [\u001b[34m${date.substring(5, date.length - 4)}\x1b[0m] (\u001b[36m${location}\x1b[0m) ${lines[0]}`
+    let ret: string = `<${colourString}${tag.toUpperCase()}\x1b[0m> [\u001b[34m${date}\x1b[0m] (\u001b[36m${location}\x1b[0m) ${lines[0]}`
     for (let i: number = 1; i < lines.length; i++) {
       ret += `\n\t${lines[i]}`
     }

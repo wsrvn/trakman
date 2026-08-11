@@ -1,8 +1,7 @@
 const p = tm.utils.palette
 
 export default {
-  isEnabled: true,
-  // Maximum amount of fetched records 
+  isEnabled: true, // Maximum amount of fetched records
   // (Dedimania normally stores 30, there are exceptions such as Nadeo maps with 50-80 records)
   dediCount: 30,
   sendLocals: true, // Send locals that are missing from Dedimania. Make sure you don't have cheaters on your server, I guess.

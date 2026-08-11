@@ -23,6 +23,7 @@ export interface WebservicesInfo {
   country: string,
   countryCode: string
 }
+
 const regex: RegExp = /[A-Z\'^£$%&*()}{@#~?><>,|=+¬ ]/
 const currentAuthorListeners: ((data?: Readonly<WebservicesInfo>) => void)[] = []
 const nextAuthorListeners: ((data?: Readonly<WebservicesInfo>) => void)[] = []
@@ -48,7 +49,7 @@ const fetchWebservices = async (login: string): Promise<FetchReturnType> => {
     path: `/tmf/players/${login}/`,
     method: 'GET',
     headers: {
-      'Authorization': "Basic " + Buffer.from(`${wsLogin}:${wsPassword}`).toString('base64'),
+      'Authorization': "Basic " + Buffer.from(`${wsLogin}:${wsPassword}`).toString('base64')
     }
   }
 
@@ -57,13 +58,17 @@ const fetchWebservices = async (login: string): Promise<FetchReturnType> => {
       let data: string = ''
       res.on('data', (chunk): void => { data += chunk })
       if (res.statusCode === 200) {
-        res.on('end', (): void => { resolve(JSON.parse(data)) })
+        try {
+          res.on('end', (): void => { resolve(JSON.parse(data)) })
+        } catch(error) {
+          reject(new Error(`Instead of a JSON, the request returned the following: ${data}. Error was: ${error}`))
+        }
       } else {
         reject(new Error(`Status code: ${res.statusCode}, message: ${data}`))
       }
     }).on('error', (): void => { reject(new Error(`HTTP request error.`)) })
-      .on('timeout', (): void => { reject(new Error(`HTTP request timeout.`)) })
-      .end()
+    .on('timeout', (): void => { reject(new Error(`HTTP request timeout.`)) })
+    .end()
   }).catch((err: Error): Error => {
     const errStr = `Webservices fetch error: ${err?.message}`
     tm.log.warn(errStr)
@@ -84,8 +89,13 @@ const fetchPlayer = async (login: string): Promise<WebservicesInfo | Error> => {
   if (player instanceof Error) { // UNKOWN PLAYER MOMENT
     return player
   } else {
+    if (player.path === null) {
+      throw new Error(`Received undefined region info from webservices for login ${login}`)
+    }
     const region = tm.utils.getRegionInfo(player.path)
-    if (region.countryCode === undefined) { throw new Error(`Received undefined country code from webservices for login ${login}`) }
+    if (region.countryCode === undefined) {
+      throw new Error(`Received undefined country code from webservices for login ${login}`)
+    }
     const info: WebservicesInfo = {
       id: Number(player.id),
       login: player.login,

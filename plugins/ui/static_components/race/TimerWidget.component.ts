@@ -3,7 +3,7 @@
  * @since 0.1
  */
 
-import { componentIds, StaticHeader, StaticComponent, centeredText, addManialinkListener } from '../../UI.js'
+import { addManialinkListener, centeredText, componentIds, StaticComponent, StaticHeader } from '../../UI.js'
 import config from './TimerWidget.config.js'
 
 export default class TimerWidget extends StaticComponent {
@@ -140,9 +140,15 @@ export default class TimerWidget extends StaticComponent {
     // }
     privilege ??= tm.players.get(login)?.privilege ?? 0
     if (this.isOnRestart || !tm.timer.isDynamic || privilege < config.timerActionsPrivilege) {
-      return { xml: this.noButtonXml, login }
+      return {
+        xml: this.noButtonXml,
+        login
+      }
     } else {
-      return { xml: this.xmlWithButtons, login }
+      return {
+        xml: this.xmlWithButtons,
+        login
+      }
     }
   }
 
@@ -265,8 +271,8 @@ export default class TimerWidget extends StaticComponent {
     if (vertical) {
       return buttonXml
     }
-    return this.header.constructXml(config.title, config.icon,
-      this.side, { rectangleWidth: headerRectWidth }) + buttonXml
+    return this.header.constructXml(config.title, config.icon, this.side,
+      { rectangleWidth: headerRectWidth }) + buttonXml
   }
 
 }
