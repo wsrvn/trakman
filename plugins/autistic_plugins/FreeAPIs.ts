@@ -50,8 +50,8 @@ tm.commands.add(
             )
             tm.sendMessage(
                 tm.utils.strVar(config.commands.urbandictionary.definitionResult, {
-                    word: word,
-                    definition: definition
+                    word: word.trim(),
+                    definition: definition.trim()
                 }), config.commands.urbandictionary.public ? undefined : info.login
             )
         },
@@ -97,8 +97,8 @@ tm.commands.add(
             )
             tm.sendMessage(
                 tm.utils.strVar(config.commands.wikipedia.articleResult, {
-                    name: name,
-                    extract: extract
+                    name: name.trim(),
+                    extract: extract.trim()
                 }), config.commands.wikipedia.public ? undefined : info.login
             )
         },
