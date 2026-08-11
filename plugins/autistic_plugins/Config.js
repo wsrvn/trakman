@@ -46,25 +46,6 @@ export default {
       privilege: 0,
       public: true
     },
-    rule34: {
-      apiUrl: `https://api.rule34.xxx/index.php?page=dapi&s=post&q=index&json=1&limit=#{fetchAmount}&tags=#{query}`,
-      warnAboutRandom: true,
-      useRandom: true,
-      usingRandom: `${p.error}No query specified, fetching a generic artwork (tag: "1girls")...`,
-      noResult: `${p.error}Couldn't find any artwork with "#{tags}" tags on Rule34.`,
-      fetchError: `${p.error}Couldn't get any response from the Rule34 API.`,
-      artworkInfo: `${p.message}[Rule34] ${p.highlight}Rating${p.message}: ${p.highlight}#{rating}${p.message}. `
-        + `${p.highlight}Submitted${p.message}: ${p.highlight}#{date}${p.message}.`,
-      artworkResult: `${p.message}[Rule34] ${p.highlight}Tags${p.message}: ${p.highlight}#{tags}${p.message}. `
-        + `${p.highlight}Image URL${p.message}: ${p.highlight}#{url}${p.message}.`,
-      aliases: [`r34`, `rule34`],
-      help: `Query Rule34 for NSFW artwork.`,
-      privilege: 0,
-      public: true,
-      fetchAmount: 500, // 10 would equal to 10 artworks accessible at one given moment (if there even is any artwork available)
-      shownTagsAmount: 10, // Amount of tags to show in the message
-      defaultTags: ['1girls', '-ai_generated,', '-anthro', '-3d'] // Tags to use when none are specified
-    },
     // Restricted APIs
     googletranslate: {
       apiUrl: ``, // We use the npm package, so this is not required
