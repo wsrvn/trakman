@@ -1,5 +1,6 @@
 import config from './Config.js'
 import http from 'http'
+import fetch from 'node-fetch'
 
 const wsLogin: string | undefined = process.env.WEBSERVICES_LOGIN
 const wsPassword: string | undefined = process.env.WEBSERVICES_PASSWORD
@@ -44,6 +45,7 @@ const fetchWebservices = async (login: string): Promise<FetchReturnType> => {
   if (!config.isEnabled) {
     return new Error('Use webservices is set to false')
   }
+
   const options = {
     host: `ws.trackmania.com`,
     path: `/tmf/players/${login}/`,
@@ -60,20 +62,45 @@ const fetchWebservices = async (login: string): Promise<FetchReturnType> => {
       if (res.statusCode === 200) {
         try {
           res.on('end', (): void => { resolve(JSON.parse(data)) })
-        } catch(error) {
+        } catch (error) {
           reject(new Error(`Instead of a JSON, the request returned the following: ${data}. Error was: ${error}`))
         }
       } else {
         reject(new Error(`Status code: ${res.statusCode}, message: ${data}`))
       }
     }).on('error', (): void => { reject(new Error(`HTTP request error.`)) })
-    .on('timeout', (): void => { reject(new Error(`HTTP request timeout.`)) })
-    .end()
+      .on('timeout', (): void => { reject(new Error(`HTTP request timeout.`)) })
+      .end()
   }).catch((err: Error): Error => {
     const errStr = `Webservices fetch error: ${err?.message}`
     tm.log.warn(errStr)
     return new Error(errStr)
   })
+}
+
+const fetchAlt = async (login: string): Promise<FetchReturnType> => {
+  try {
+    const url = `${config.altServiceURL}/player/${login}?ws=true`
+    const res = await fetch(url)
+    if (!res.ok) {
+      const errStr = `UnitedLadder responded with status ${res.status} for login ${login}`
+      tm.log.warn(errStr)
+      return new Error(errStr)
+    }
+    const json = await res.json() as any
+    return {
+      id: json?.id,
+      login: json?.login,
+      nickname: json?.nickname,
+      united: json?.united,
+      path: json?.path,
+      idZone: json?.idZone, // this will be changed to zoneId soon
+    }
+  } catch (err) {
+    const errStr = err instanceof Error ? err.message : String(err)
+    tm.log.warn(`UnitedLadder error for login ${login}: ${errStr}`)
+    return new Error(errStr)
+  }
 }
 
 /**
@@ -85,7 +112,9 @@ const fetchPlayer = async (login: string): Promise<WebservicesInfo | Error> => {
   const cacheEntry: WebservicesInfo | undefined = cachedAuthors.find(a => a.login === login)
   if (cacheEntry !== undefined) { return cacheEntry }
   if (regex.test(login)) { return new Error(`Login doesn't pass regex test`) }
-  const player = await fetchWebservices(login)
+  const player = config.altService
+    ? await fetchAlt(login)
+    : await fetchWebservices(login)
   if (player instanceof Error) { // UNKOWN PLAYER MOMENT
     return player
   } else {
