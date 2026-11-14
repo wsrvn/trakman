@@ -1,6 +1,6 @@
 import config from './Config.js'
 import fetch from 'node-fetch'
-import xpath, { SelectedValue } from 'xpath'
+import xpath, { type SelectedValue } from 'xpath'
 import { DOMParser } from 'xmldom'
 import { helpers as h } from './HelperFunctions.js'
 import * as gt from '@vitalets/google-translate-api'
@@ -31,14 +31,14 @@ tm.commands.add(
             }
             tm.sendMessage(
                 tm.utils.strVar(config.commands.googletranslate.translateInfo, {
-                    input: tm.utils.strip(text),
+                    input: tm.utils.strip(text.trim()),
                     from,
                     to,
                 }), config.commands.googletranslate.public ? undefined : info.login
             )
             tm.sendMessage(
                 tm.utils.strVar(config.commands.googletranslate.translateResult, {
-                    result: tm.utils.strip(res.text),
+                    result: tm.utils.strip(res.text.trim()),
                 }), config.commands.googletranslate.public ? undefined : info.login
             )
         },
@@ -79,7 +79,7 @@ tm.commands.add(
                     fatalError: function (f) { },
                 }
             }).parseFromString(html, "text/xml")
-            const res: SelectedValue[] = xpath.select(`//html/body/form/div[@class="filters"]/table`, xml);
+            const res: SelectedValue[] = xpath.select(`//html/body/table`, xml)
             if (res.length < 3) {
                 tm.sendMessage(
                     tm.utils.strVar(config.commands.duckduckgo.noResult, {
@@ -110,8 +110,8 @@ tm.commands.add(
             )
             tm.sendMessage(
                 tm.utils.strVar(config.commands.duckduckgo.searchResult, {
-                    title: resultTitle,
-                    snippet: resultContent
+                    title: resultTitle.trim(),
+                    snippet: resultContent.trim()
                 }), config.commands.duckduckgo.public ? undefined : info.login
             )
         },
