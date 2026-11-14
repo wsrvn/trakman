@@ -5,9 +5,7 @@ export default {
   timer: 70,
   map: 80,
   previousAndBest: 90,
-  buttons1: 100,
-  buttons2: 4329873298324,
-  buttons3: 42398324734,
+  buttons: 100,
   mapResult: 200,
   karma: 300,
   admin: 400,
@@ -85,6 +83,7 @@ export default {
   ultiRanking: 530000,
   ultiRecords: 540000,
   favouriteButton: 560000,
-  liveCpsRanking: 550000, // needs 3.1 mil ids
+  liveCpsRanking: 550000,
+  // needs 3.1 mil ids
   mapList: 10000000
 }

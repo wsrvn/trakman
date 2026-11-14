@@ -4,7 +4,7 @@ import cfg from '../../config/RaceUi.js'
 const p = tm.utils.palette
 
 export default {
-  height: 5.45,
+  height: 7.45,
   stuntsDynamicMarginTop: 5.5,
   stuntsHeight: 6.45 + 5.5,
   width: cfg.width,

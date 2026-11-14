@@ -4,29 +4,13 @@ import icons from '../../../config/Icons.js'
 const palette = tm.utils.palette
 
 export default {
-  height: 4.84,
+  height: 14.5,
   width: cfg.width,
   margin: cfg.margin,
-  rows: 1,
-  columns: 4,
-  order1: [
-    'VisitCounter',
-    'PlayerCounter',
-    'VersionButton',
-    'TimeButton',
-  ],
-  order2: [
-    'MapsButton',
-    'StatsButton',
-    'SectorsButton',
-    'CommandListButton',
-  ],
-  order3: [
-    'VoteSkip',
-    'VoteReplay',
-    'PaySkip',
-    'PayReplay'
-  ],
+  rows: 3,
+  columns: 2,
+  order: ['VisitCounter', 'PlayerCounter', 'VersionButton', 'TimeButton', 'MapsButton', 'StatsButton', 'SectorsButton',
+  'CommandListButton'],
   visitCounter: {
     texts: {
       0: '#{count}',
@@ -193,7 +177,7 @@ export default {
       1: '$AF4REACHED',
       equal: true
     }],
-    timeExtension: 1000 * 60 * 5, // 5 minutes
+    timeExtension: tm.config.controller.defaultTimeAttackTimeLimit,
     extensionsLimit: 2, // 0 to disable limit
     resHeader: `${tm.utils.palette.highlight}Vote to $${tm.utils.palette.green}REPLAY${tm.utils.palette.highlight} the ongoing map`,
     extendHeader: `${tm.utils.palette.highlight}Vote to $${tm.utils.palette.green}EXTEND${tm.utils.palette.highlight} the time on the ongoing map`,

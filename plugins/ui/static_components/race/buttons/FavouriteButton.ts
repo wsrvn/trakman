@@ -1,12 +1,24 @@
-import type { ButtonData } from "./ButtonData.js"
-import { UiButton } from "./UiButton.js"
-import config from "./ButtonsWidget.config.js"
+import type { ButtonData } from './ButtonData.js'
+import { UiButton } from './UiButton.js'
+import userConfig from './ButtonsWidget.config.js'
 import { componentIds } from '../../../UI.js'
+
+const config = tm.utils.withDefaults(userConfig, {
+  favouriteButton: {
+    texts: {
+      0: '$AF4ADD TO',
+      1: 'FAVOURITES',
+      equal: false,
+    },
+    width: 1.8,
+    height: 1.8,
+    padding: 0.3,
+  },
+})
 
 const cfg = config.favouriteButton
 
 export class FavouriteButton extends UiButton {
-
   buttonData: ButtonData
 
   constructor() {
@@ -20,8 +32,8 @@ export class FavouriteButton extends UiButton {
       padding: cfg.padding,
       actionId: componentIds.favouriteButton,
       equalTexts: cfg.texts.equal,
-      link: "tmtp://#addfavourite=" + tm.config.server.login
+      addPlayerId: true,
+      manialink: `addfavorite?action=add&amp;server=${tm.config.server.login}&amp;name=${encodeURIComponent(tm.config.server.name)}&amp;zone=${encodeURIComponent(tm.config.server.zone)}`,
     }
   }
-
 }
